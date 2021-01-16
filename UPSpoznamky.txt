@@ -1,0 +1,22 @@
+semetrálka
+http://home.zcu.cz/~ublm/vyuka/ups/src/C/
+
+cviceni
+http://home.zcu.cz/~skupaj/vyuka/ups/old2018/
+
+pøednášky
+http://students.kiv.zcu.cz/ups/
+
+
+
+semestrálka
+- mezní datum 31.1.2021 - øádné datum 15.1.
+
+vycházet z dámy         C:\Users\uzivatel\Documents\skola\3rocnik\UPS\UPS-draughts
+
+
+server
+cd /home/sopr/UPSSemestral/ukázka\ ze\ cviceni/workin/c_src/
+
+client
+C:\Users\uzivatel\Documents\skola\3rocnik\UPS\ukázka ze cviceni\workin\java_src
