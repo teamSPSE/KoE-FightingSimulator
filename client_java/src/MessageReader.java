@@ -13,18 +13,8 @@ public class MessageReader extends Thread {
 	BufferedReader msgIn = null;
 	Socket sock;
 	Connection con;
-	String login = null;
-	String logout = null;
-	String createRoom = null;
-	String joinRoom = null;
-	String startGame = null;
-	String turn = null;
-	String wait = null;
-	String quit = null;
 	DataOutputStream msgOut;
 	boolean flag = false;
-//	private final static Logger LOGGER = Logger.getLogger(Connection.class.getName());
-//	private static FileHandler fh = null;
 	String pingMsg = "00213";
 	String pingRespMsg = "00214";
 
@@ -34,7 +24,6 @@ public class MessageReader extends Thread {
 			this.msgIn = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 		} catch (IOException e) {
 			System.out.println("Failed to get input stream.");
-	//		LOGGER.log(Level.INFO, "Failed to get input stream.");
 			System.exit(1);
 		}
 		this.con = con;
@@ -65,7 +54,7 @@ public class MessageReader extends Thread {
 			}
 			if (msg != null) {
 				parseMsg(msg);
-			} else {/*
+			} else {
 		//		System.out.println("Socket read timeout.");
 		//		LOGGER.log(Level.INFO, "Socket read timeout.");
 				try {
@@ -78,7 +67,7 @@ public class MessageReader extends Thread {
 		//			LOGGER.log(Level.INFO, "Failed to send ping message.");
 					
 		//			LOGGER.log(Level.INFO, "Server closed connection. Program will quit.");
-					Platform.exit();
+					//Platform.exit();
 					System.exit(0);
 				}
 				try {
@@ -86,7 +75,7 @@ public class MessageReader extends Thread {
 				} catch (IOException e) {
 					System.out.println("Server not responding. Attempting to reconnect.");
 			//		LOGGER.log(Level.INFO, "Server not responding. Attempting to reconnect.");
-					Platform.runLater(() -> BattleShips.reconWait());
+					//Platform.runLater(() -> BattleShips.reconWait());
 					try {
 						sock.close();
 					} catch (IOException e1) {
@@ -104,7 +93,7 @@ public class MessageReader extends Thread {
 							} catch (InterruptedException e1) {
 					//			LOGGER.log(Level.INFO, "Thread error. Application quit.");
 								System.out.println("Thread error. Application quit.");
-								Platform.exit();
+								//Platform.exit();
 								System.exit(1);
 							}
 						} else {
@@ -114,7 +103,7 @@ public class MessageReader extends Thread {
 					if (sock == null) {
 						System.out.println("Failed to reconnect. Application quit.");
 				//		LOGGER.log(Level.INFO, "Failed to reconnect. Application quit.");
-						Platform.runLater(() -> BattleShips.serverUn());
+						//Platform.runLater(() -> BattleShips.serverUn());
 						break;
 					} else {
 						System.out.println("Reconnection succesful.");
@@ -124,19 +113,19 @@ public class MessageReader extends Thread {
 						} catch (IOException e5) {
 							System.out.println("Failed to get input stream.");
 				//			LOGGER.log(Level.INFO, "Failed to get input stream.");
-							Platform.exit();
+							//Platform.exit();
 							System.exit(1);
 						}
 						this.msgOut = con.getMsgOut();
-						if (BattleShips.userName != null) {
+					/*	if (BattleShips.userName != null) {
 							con.sendRecon(BattleShips.userName);
-						}
+						}*/
 						continue;
 					}
 				}
 		//		System.out.println("Server responded to ping message.");
 		//		LOGGER.log(Level.INFO, "Server responded to ping message.");
-			*/}
+			}
 		}
 	}
 
@@ -155,6 +144,13 @@ public class MessageReader extends Thread {
 		} else if(p[0].equals("logo")){
 		//	System.out.println("Message not recognized. Program will quit.");
 			System.out.println("2->"+msg);
+		} else if (p[0].equals("ping")) {
+			try {
+				msgOut.write(pingRespMsg.getBytes());
+			} catch (IOException e) {
+				System.out.println("Cannot send ping response.");
+				//		LOGGER.log(Level.INFO, "Cannot send ping response.");
+			}
 		} else{
 			System.out.println("Message not recognized. Program will quit. msg:"+msg);
 			//Platform.exit();

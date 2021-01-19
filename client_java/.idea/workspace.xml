@@ -2,8 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4413b61f-fe87-44d8-8a26-833da2615950" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SwordAndSandals.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../SwordAndSandals.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/client_java.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/client_java.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Connection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Connection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MessageReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MessageReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server_c/user.h" beforeDir="false" afterPath="$PROJECT_DIR$/../server_c/user.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,16 +30,18 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="GenerateAntBuildDialog.enableUiFormCompile" value="true" />
     <property name="GenerateAntBuildDialog.forceTargetJdk" value="true" />
     <property name="GenerateAntBuildDialog.generateIdeaHomeProperty" value="true" />
     <property name="GenerateAntBuildDialog.generateSingleFile" value="true" />
-    <property name="GenerateAntBuildDialog.outputFileNameProperty" value="build" />
+    <property name="GenerateAntBuildDialog.outputFileNameProperty" value="testant" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="last_opened_file_path" value="C:/Program Files/Java/javafx-sdk-15.0.1/lib" />
+    <property name="project.structure.last.edited" value="Global Libraries" />
     <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2" />
   </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -64,34 +75,38 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="1032" y="178" key="#Project_Structure/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1610675864137" />
-    <state x="1115" y="229" key="FileChooserDialogImpl" timestamp="1610677572661">
+    <state x="811" y="409" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1610844839859">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="1115" y="229" key="FileChooserDialogImpl/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1610677572661" />
-    <state width="914" height="279" key="GridCell.Tab.0.bottom" timestamp="1610823450325">
+    <state x="811" y="409" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1610844839859" />
+    <state x="1115" y="229" key="FileChooserDialogImpl" timestamp="1610845416974">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="914" height="279" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1610823450325" />
+    <state x="1115" y="229" key="FileChooserDialogImpl/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1610845416974" />
+    <state width="1877" height="281" key="GridCell.Tab.0.bottom" timestamp="1611071870040">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="281" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1611071870040" />
     <state width="914" height="279" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1610732126237" />
-    <state width="914" height="279" key="GridCell.Tab.0.center" timestamp="1610823450324">
+    <state width="1877" height="281" key="GridCell.Tab.0.center" timestamp="1611071870039">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="914" height="279" key="GridCell.Tab.0.center/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1610823450324" />
+    <state width="1877" height="281" key="GridCell.Tab.0.center/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1611071870039" />
     <state width="914" height="279" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1610732126237" />
-    <state width="914" height="279" key="GridCell.Tab.0.left" timestamp="1610823450324">
+    <state width="1877" height="281" key="GridCell.Tab.0.left" timestamp="1611071870039">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="914" height="279" key="GridCell.Tab.0.left/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1610823450324" />
+    <state width="1877" height="281" key="GridCell.Tab.0.left/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1611071870039" />
     <state width="914" height="279" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1610732126236" />
-    <state width="914" height="279" key="GridCell.Tab.0.right" timestamp="1610823450325">
+    <state width="1877" height="281" key="GridCell.Tab.0.right" timestamp="1611071870040">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="914" height="279" key="GridCell.Tab.0.right/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1610823450325" />
+    <state width="1877" height="281" key="GridCell.Tab.0.right/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1611071870040" />
     <state width="914" height="279" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1610732126237" />
-    <state x="880" y="94" key="SettingsEditor" timestamp="1610677574650">
+    <state x="880" y="94" key="SettingsEditor" timestamp="1610845426337">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="880" y="94" key="SettingsEditor/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1610677574650" />
+    <state x="880" y="94" key="SettingsEditor/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1610845426337" />
   </component>
   <component name="simpleUML.UMLToolWindowPlugin">
     <General>

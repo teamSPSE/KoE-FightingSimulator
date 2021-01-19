@@ -1,8 +1,21 @@
-import java.io.*;
-import java.net.*;
-import java.util.Random;
 
-class Main
+import javafx.application.Application;
+import javafx.stage.Stage;
+
+public class Main extends Application {
+
+	public static void main(String[] args) {
+		Application.launch(args);
+	}
+
+	@Override
+	public void start(Stage stage) throws Exception {
+		MainWindow window = new MainWindow(stage, this.getParameters().getRaw());
+		window.show();
+	}
+}
+
+/*
 {
 	public static void main(String argv[]) throws Exception
 	{
@@ -27,3 +40,4 @@ class Main
 
 	}
 }
+*/

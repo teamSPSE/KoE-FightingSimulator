@@ -2,10 +2,8 @@
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.UnknownHostException;
+import java.net.*;
+import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,21 +16,55 @@ public class Connection {
 	private Socket socket = null;
 	private DataOutputStream msgOut = null;
 	private MessageReader mr = null;
-//	private final static Logger LOGGER = Logger.getLogger(Connection.class.getName());
-//	private static FileHandler fh = null;
-	private String addr;
-	private int port;
+	private String addr = "192.168.50.3";
+	private int port = 10000;
 
-	public Connection() {
-//		try {
-	//		fh = new FileHandler("ClientLog.log");
-//		} catch (SecurityException | IOException e) {
-//			System.out.println("Failed to initialize logger file handler.");
-//		}
-//		LOGGER.addHandler(fh);
-//		SimpleFormatter form = new SimpleFormatter();
-//		fh.setFormatter(form);
-//		LOGGER.setUseParentHandlers(false);
+	public Connection(List<String> args) {
+		switch(args.size()) {
+			case 4:
+				if (args.get(2).equals("-port") || args.get(2).equals("-p")) {
+					try {
+						this.port = Integer.parseInt(args.get(3));
+					}
+					catch (Exception e) {
+						System.out.println("Writed port: '" + args.get(3) + "' is not a number, using default port: " + this.port);
+					}
+				}
+				else {
+					System.out.println("Third parameter is not -port or -p, using default port: " + this.port);
+				}
+			case 2:
+				if (args.get(0).equals("-address") || args.get(0).equals("-a")) {
+					try {
+						if (checkIPv4(args.get(1))) {
+							this.addr = args.get(1);
+						}
+						else {
+							System.out.println("Writed address: '" + args.get(1) + "' is not a valid IPv4 address, using default address: " + this.addr);
+						}
+					}
+					catch (Exception e) {
+						System.out.println("Writed address: '" + args.get(1) + "' is not a valid IPv4 address, using default address: " + this.addr);
+					}
+				}
+				else {
+					System.out.println("First parameter is not -address or -a, using default address: " + this.addr);
+				}
+			default:
+				break;
+		}
+	}
+
+	public static final boolean checkIPv4(final String ip) {
+		boolean isIPv4;
+		try {
+			final InetAddress inet = InetAddress.getByName(ip);
+			isIPv4 = inet.getHostAddress().equals(ip) && inet instanceof Inet4Address;
+		}
+		catch (final UnknownHostException e) {
+			isIPv4 = false;
+		}
+		return isIPv4;
 	}
 
 	public boolean connect(String addr, int port) {
@@ -159,6 +191,19 @@ public class Connection {
 	}
 
 	public void joinLobby() {
+		String msg = genMsg("", 3);
+		//	System.out.println("Sending create room request: " + msg + ", message size: " + msg.length());
+		//	LOGGER.log(Level.INFO, "Sending create room request: " + msg + ", message size: " + msg.length());
+		//BattleShips.bytesOut += msg.length();
+		try {
+			msgOut.write(msg.getBytes());
+		} catch (IOException e) {
+			System.out.println("Failed to send create room message.");
+			//		LOGGER.log(Level.INFO, "Failed to send create room message.");
+		}
+	}
+
+	public void appEnd() {
 		String msg = genMsg("", 3);
 		//	System.out.println("Sending create room request: " + msg + ", message size: " + msg.length());
 		//	LOGGER.log(Level.INFO, "Sending create room request: " + msg + ", message size: " + msg.length());

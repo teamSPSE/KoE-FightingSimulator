@@ -8,6 +8,7 @@
 typedef struct theuser{
     char *name;
     int socket;
+    int health;
 } user;
 typedef struct theusers{
     int user_count;

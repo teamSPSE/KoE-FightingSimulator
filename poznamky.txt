@@ -1,0 +1,8 @@
+17/01/2021 2:30:20 - udìlat login stage, doladit posílání zpráv, možná udìlat pøes enum
+
+
+
+    <exec executable="javac" dir="${basedir}">
+      <arg value="src/*.java"/>
+      <arg classpath="C:\Program Files\Java\javafx-sdk-15.0.1\lib"/>
+    </exec>

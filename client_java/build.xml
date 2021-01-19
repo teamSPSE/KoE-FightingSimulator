@@ -12,12 +12,12 @@
         <include name="*.class"/>
         <exclude name="*.java"/>
       </fileset>
-    </move>    
+    </move>
     <jar destfile="../SwordAndSandals.jar"
-      basedir="${basedir}/bin"
-      includes="*.class">
+         basedir="${basedir}/bin"
+         includes="*.class">
       <manifest>
-          <attribute name="Main-Class" value="Main"/>
+        <attribute name="Main-Class" value="Main"/>
       </manifest>
     </jar>
   </target>
