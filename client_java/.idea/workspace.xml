@@ -2,28 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4413b61f-fe87-44d8-8a26-833da2615950" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/Connection.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/production/client_java/Connection.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/Constants.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/production/client_java/Constants.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/production/client_java/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/MainWindow$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/production/client_java/MainWindow$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/MainWindow.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/production/client_java/MainWindow.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/MessageReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/production/client_java/MessageReader.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/Connection.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/production/client_java/production/client_java/Connection.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/Constants.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/production/client_java/production/client_java/Constants.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/production/client_java/production/client_java/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/MainWindow$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/production/client_java/production/client_java/MainWindow$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/MainWindow.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/production/client_java/production/client_java/MainWindow.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/MessageReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/production/client_java/production/client_java/MessageReader.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/production/client_java/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/production/client_java/production/client_java/production/client_java/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/production/client_java/MainWindow$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/production/client_java/production/client_java/production/client_java/MainWindow$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/production/client_java/MainWindow.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/production/client_java/production/client_java/production/client_java/MainWindow.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/production/client_java/MessageReader.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Connection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Connection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainWindow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MessageReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MessageReader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Client.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,6 +72,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="1032" y="178" key="#Project_Structure/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1610675864137" />
+    <state x="765" y="204" key="#com.intellij.ide.util.MemberChooser" timestamp="1611080151675">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="765" y="204" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1611080151675" />
     <state x="811" y="409" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1610844839859">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
