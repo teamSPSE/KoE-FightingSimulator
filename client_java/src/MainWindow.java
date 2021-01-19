@@ -16,7 +16,7 @@ import java.util.List;
 public class MainWindow {
 	private Connection conn;
 	private Stage primaryStage;
-	private String username;
+	public Client client = null;
 	public Boolean play_processed = false;
 
 	//login
@@ -37,6 +37,7 @@ public class MainWindow {
 		int port = 10000;
 		this.conn.connect(host, port);
 		this.primaryStage = createLoginStage(stage);
+		this.client = new Client("");
 	}
 
 
@@ -119,7 +120,7 @@ public class MainWindow {
 		play.setMaxWidth(75);
 		nameOfGame.setFont(new Font(20));
 		nameOfPlayer.setFont(new Font(20));
-		nameOfPlayer.setText(username);
+		nameOfPlayer.setText(client.getUserName());
 		nameOfPlayer.setTextFill(javafx.scene.paint.Color.web(Color.Blue.getHexColor()));
 
 		if (play_processed) {
@@ -158,7 +159,6 @@ public class MainWindow {
 		this.play_processed = true;
 		play.setDisable(true);
 		play.setText("Queued");
-
 	}
 
 	public Stage onCloseEvent(Stage stage) {

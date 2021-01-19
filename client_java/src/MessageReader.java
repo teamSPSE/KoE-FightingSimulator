@@ -139,11 +139,11 @@ public class MessageReader extends Thread {
 
 		String[] p = msg.split("-");
 		if (p[0].equals("logi")) {
-			con.mainWindow.processLogin(msg);
+			Platform.runLater(() -> con.mainWindow.processLogin(msg));
 			System.out.println(msg);
 		} else if(p[0].equals("logo")){
 		//	System.out.println("Message not recognized. Program will quit.");
-			System.out.println("2->"+msg);
+			System.out.println(msg);
 		} else if (p[0].equals("ping")) {
 			try {
 				msgOut.write(pingRespMsg.getBytes());

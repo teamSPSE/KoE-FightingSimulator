@@ -168,27 +168,19 @@ public class Connection {
 
 	public void login(String name) {System.out.println(name);
 		String msg = genMsg(name, 1);
-	//	LOGGER.log(Level.INFO, "Sending login request " + msg + ", message size: " + msg.length());
-	//	System.out.println("Sending login request: " + msg + ", message size: " + msg.length());
-		//BattleShips.bytesOut += msg.length();
+		mainWindow.client.setUserName(name);
 		try {
 			msgOut.write(msg.getBytes());
-			//msgOut.flush();
 		} catch (IOException e) {
 			System.out.println("Failed to send login message.");
-	//		LOGGER.log(Level.INFO, "Failed to send login message.");
 			e.printStackTrace();
 		}
 	}
 
 	public void logout() {
 		String msg = genMsg("", 2);
-//		LOGGER.log(Level.INFO, "Sending logout request " + msg + ", message size: " + msg.length());
-	//	System.out.println("Sending logout request: " + msg + ", message size: " + msg.length());
-	//	BattleShips.bytesOut += msg.length();
 		try {
 			msgOut.write(msg.getBytes());
-			msgOut.flush();
 		} catch (IOException e) {
 			System.out.println("Failed to send logout message.");
 	//		LOGGER.log(Level.INFO, "Failed to send logout message.");
@@ -197,14 +189,11 @@ public class Connection {
 
 	public void joinLobby() {
 		String msg = genMsg("", 3);
-		//	System.out.println("Sending create room request: " + msg + ", message size: " + msg.length());
-		//	LOGGER.log(Level.INFO, "Sending create room request: " + msg + ", message size: " + msg.length());
-		//BattleShips.bytesOut += msg.length();
+		mainWindow.client.setState(States.IN_LOBBY);
 		try {
 			msgOut.write(msg.getBytes());
 		} catch (IOException e) {
 			System.out.println("Failed to send create room message.");
-			//		LOGGER.log(Level.INFO, "Failed to send create room message.");
 		}
 	}
 
