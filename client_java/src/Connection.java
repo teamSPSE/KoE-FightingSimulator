@@ -13,13 +13,14 @@ import java.util.logging.SimpleFormatter;
 
 public class Connection {
 
+	public MainWindow mainWindow = null;
 	private Socket socket = null;
 	private DataOutputStream msgOut = null;
 	private MessageReader mr = null;
 	private String addr = "192.168.50.3";
 	private int port = 10000;
 
-	public Connection(List<String> args) {
+	public Connection(List<String> args, MainWindow mainWindow) {
 		switch(args.size()) {
 			case 4:
 				if (args.get(2).equals("-port") || args.get(2).equals("-p")) {
@@ -52,6 +53,10 @@ public class Connection {
 				}
 			default:
 				break;
+		}
+
+		if(mainWindow != null){
+			this.mainWindow = mainWindow;
 		}
 	}
 
@@ -161,7 +166,7 @@ public class Connection {
 		}
 	}
 
-	public void login(String name) {
+	public void login(String name) {System.out.println(name);
 		String msg = genMsg(name, 1);
 	//	LOGGER.log(Level.INFO, "Sending login request " + msg + ", message size: " + msg.length());
 	//	System.out.println("Sending login request: " + msg + ", message size: " + msg.length());
@@ -203,19 +208,18 @@ public class Connection {
 		}
 	}
 
-	public void appEnd() {
-		String msg = genMsg("", 3);
-		//	System.out.println("Sending create room request: " + msg + ", message size: " + msg.length());
-		//	LOGGER.log(Level.INFO, "Sending create room request: " + msg + ", message size: " + msg.length());
+	public void sendRecon(String name) {
+		String msg = genMsg(name, 16);
+		//	System.out.println("Sending relogin request: " + msg + ", message size: " + msg.length());
+		//	LOGGER.log(Level.INFO, "Sending relogin request: " + msg + ", message size: " + msg.length());
 		//BattleShips.bytesOut += msg.length();
 		try {
 			msgOut.write(msg.getBytes());
 		} catch (IOException e) {
-			System.out.println("Failed to send create room message.");
-			//		LOGGER.log(Level.INFO, "Failed to send create room message.");
+			System.out.println("Failed to send relogin message.");
+			//		LOGGER.log(Level.INFO, "Failed to send relogin message.");
 		}
 	}
-
 
 	public Socket getSocket() {
 		return socket;

@@ -68,16 +68,16 @@ void want_play(users *theusers, lobby **thelobby, games **thegames, int socket, 
 
 		lobby_remove_player(thelobby, socket_ID_1);
 		lobby_remove_player(thelobby, socket_ID_2);								
-		printf("in\n");
+		
 		char message_1[100] = "game-started";
 		char message_2[100] = "game-started";
 		char *now_playing = "test";												
-printf("in2 usrs:%d\n",theusers->user_count);
+
 		my_user = user_get_user_by_socket_ID(theusers, socket_ID_1);
 		second_user = user_get_user_by_socket_ID(theusers, socket_ID_2);
-printf("in3, myusr:%d, sec_usr:%d\n", my_user->socket, second_user->socket);
+
 		game_add(thegames, my_user -> name, second_user -> name, now_playing);
-		printf("in4\n");
+		
 		send_message(socket_ID_1, &message_1[0], thelogger);
 		send_message(socket_ID_2, &message_2[0], thelogger);
 	}
@@ -111,6 +111,15 @@ int parse_msg(int socket, char *msg) {
             printf("Received joinLobby request: %s\n", msg);
             pthread_rwlock_unlock(&lock);
             return 3;
+        case 13:
+            pthread_rwlock_rdlock(&lock);
+            printf("Received ping message, sending response.\n");
+            send(socket, "alive\n", 6, 0);
+            pthread_rwlock_unlock(&lock);
+            return 13;            
+        case 14:
+            printf("Received ping response from socket: %d\n", socket);
+            return 14;
         default:
             printf("%s\n", msg);
             return 0;
@@ -123,7 +132,7 @@ void *connection_handler(void *arg) {
     client_sock = *(int *) arg;
     int missed_ping = 0;
 
-	printf("users:%d\n",theusers->user_count);
+	
 
     while (1) {
         memset(msg, '\0', sizeof(msg));

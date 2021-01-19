@@ -1,4 +1,7 @@
 
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.logging.FileHandler;
@@ -45,42 +48,40 @@ public class MessageReader extends Thread {
 			}
 			String msg = null;
 			try {
-				//msg = msgIn.readLine();
-				char messageArr[] = new char[32];
-				msgIn.read(messageArr);
-				msg = new String(messageArr);
+				msg = msgIn.readLine();
 			} catch (IOException e) {
 				msg = null;
 			}
 			if (msg != null) {
 				parseMsg(msg);
 			} else {
-		//		System.out.println("Socket read timeout.");
-		//		LOGGER.log(Level.INFO, "Socket read timeout.");
+				//		System.out.println("Socket read timeout.");
+				//		LOGGER.log(Level.INFO, "Socket read timeout.");
 				try {
-			//		System.out.println("Sending ping message.");
-		//			LOGGER.log(Level.INFO, "Sending ping message.");
+					//		System.out.println("Sending ping message.");
+					//			LOGGER.log(Level.INFO, "Sending ping message.");
 					msgOut.write(pingMsg.getBytes());
+					//System.out.println(pingMsg);
 				} catch (IOException e) {
 					System.out.println("Server closed connection. Program will quit.");
 					//System.out.println("Failed to send ping message.");
-		//			LOGGER.log(Level.INFO, "Failed to send ping message.");
-					
-		//			LOGGER.log(Level.INFO, "Server closed connection. Program will quit.");
-					//Platform.exit();
+					//			LOGGER.log(Level.INFO, "Failed to send ping message.");
+
+					//			LOGGER.log(Level.INFO, "Server closed connection. Program will quit.");
+					Platform.exit();
 					System.exit(0);
 				}
 				try {
 					msg = msgIn.readLine();
 				} catch (IOException e) {
 					System.out.println("Server not responding. Attempting to reconnect.");
-			//		LOGGER.log(Level.INFO, "Server not responding. Attempting to reconnect.");
+					//		LOGGER.log(Level.INFO, "Server not responding. Attempting to reconnect.");
 					//Platform.runLater(() -> BattleShips.reconWait());
 					try {
 						sock.close();
 					} catch (IOException e1) {
 						System.out.println("Failed to close socket. Application will quit.");
-				//		LOGGER.log(Level.INFO, "Failed to close socket. Application will quit.");
+						//		LOGGER.log(Level.INFO, "Failed to close socket. Application will quit.");
 						e1.printStackTrace();
 					}
 					int i = 0;
@@ -91,9 +92,9 @@ public class MessageReader extends Thread {
 							try {
 								sleep(5000);
 							} catch (InterruptedException e1) {
-					//			LOGGER.log(Level.INFO, "Thread error. Application quit.");
+								//			LOGGER.log(Level.INFO, "Thread error. Application quit.");
 								System.out.println("Thread error. Application quit.");
-								//Platform.exit();
+								Platform.exit();
 								System.exit(1);
 							}
 						} else {
@@ -102,25 +103,25 @@ public class MessageReader extends Thread {
 					}
 					if (sock == null) {
 						System.out.println("Failed to reconnect. Application quit.");
-				//		LOGGER.log(Level.INFO, "Failed to reconnect. Application quit.");
+						//		LOGGER.log(Level.INFO, "Failed to reconnect. Application quit.");
 						//Platform.runLater(() -> BattleShips.serverUn());
 						break;
 					} else {
 						System.out.println("Reconnection succesful.");
-				//		LOGGER.log(Level.INFO, "Reconnection succesful.");
+						//		LOGGER.log(Level.INFO, "Reconnection succesful.");
 						try {
 							this.msgIn = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 						} catch (IOException e5) {
 							System.out.println("Failed to get input stream.");
-				//			LOGGER.log(Level.INFO, "Failed to get input stream.");
-							//Platform.exit();
+							//			LOGGER.log(Level.INFO, "Failed to get input stream.");
+							Platform.exit();
 							System.exit(1);
 						}
-						this.msgOut = con.getMsgOut();
-					/*	if (BattleShips.userName != null) {
+						/*this.msgOut = con.getMsgOut();
+						if (BattleShips.userName != null) {
 							con.sendRecon(BattleShips.userName);
-						}*/
-						continue;
+						}
+						continue;*/
 					}
 				}
 		//		System.out.println("Server responded to ping message.");
@@ -129,7 +130,7 @@ public class MessageReader extends Thread {
 		}
 	}
 
-	public synchronized void parseMsg(String msg) {
+	public synchronized void parseMsg(String msg) {System.out.println("msg:"+msg);
 		if (msg == null) {
 			System.out.println("Server closed connection. Program will quit.");
 	//		LOGGER.log(Level.INFO, "Server closed connection. Program will quit.");
@@ -138,8 +139,7 @@ public class MessageReader extends Thread {
 
 		String[] p = msg.split("-");
 		if (p[0].equals("logi")) {
-	//		System.out.println("Received login respose: " + msg + ", message size: " + msg.length());
-	//		LOGGER.log(Level.INFO, "Received login response: " + msg + ", message size: " + msg.length());
+			con.mainWindow.processLogin(msg);
 			System.out.println(msg);
 		} else if(p[0].equals("logo")){
 		//	System.out.println("Message not recognized. Program will quit.");
@@ -154,7 +154,7 @@ public class MessageReader extends Thread {
 		} else{
 			System.out.println("Message not recognized. Program will quit. msg:"+msg);
 			//Platform.exit();
-			System.exit(0);
+			//System.exit(0);
 		}
 	}
 

@@ -24,7 +24,7 @@ public class Constants {
 	public static final int stageWidthLogin = 300;
 	public static final int stageHeightLogin = 200;
 	
-	public static final String gameTitle = "Draughts";
+	public static final String gameTitle = "Kingdom of Edeon: Fight simulator";
 	public static final String loginName = "Enter your name: ";
 	public static final String currentStatus = "Current status: ";
 	public static final String onlinePlayers = "Online players: ";

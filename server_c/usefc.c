@@ -8,7 +8,7 @@
 #include "logger.h"
 
 void send_message(int user_socket, char *message, logger **info) {	
-	printf("%d Writed message: %s\n", user_socket, message);
+	//printf("%d Writed message: %s\n", user_socket, message);
 	send(user_socket, message, strlen(message) * sizeof(char), 0);	
 	(*info) -> bytes_out += strlen(message) + 1;
 	return;
