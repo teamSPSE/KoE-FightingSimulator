@@ -33,6 +33,7 @@ void user_create(user **usr, char *name, int socket_ID) {
     }
 	strcpy((*usr) -> name, name);
 	(*usr) -> socket = socket_ID;
+	(*usr) -> health = 100;
 	return;
 }
 
@@ -74,10 +75,11 @@ void user_remove(users **usrs, lobby **thelobby, int socket_ID, logger **log) {
 			(*usrs) -> users = realloc((*usrs) -> users, (*usrs) -> user_count * sizeof(user));
             if(!(*usrs) -> users){
                 printf("Users memory realocation err in user_remove!\n");
+				printf("Sent message: logo-nack\n");
                 return;
             }            
             printf("User %s logged out\n", (*usrs) -> users[i] -> name);
-		    send_message(socket_ID, "logi-nack\n", log);
+		    send_message(socket_ID, "logo-ack\n", log);
 			printf("Actually logged users: %d\n", (*usrs) -> user_count);	
 			return;
 		}

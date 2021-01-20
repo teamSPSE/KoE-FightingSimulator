@@ -6,3 +6,6 @@
       <arg value="src/*.java"/>
       <arg classpath="C:\Program Files\Java\javafx-sdk-15.0.1\lib"/>
     </exec>
+    
+    
+problem s vytváøením hry, neposílá se odpovìd serveru, asi problem se sockety    

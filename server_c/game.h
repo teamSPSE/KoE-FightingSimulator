@@ -15,6 +15,7 @@ struct the_game {
 	char *name_2;
 	char *now_playing;
 	int game_ID;
+	
 };
 struct the_games {
 	int games_count;

@@ -6,6 +6,7 @@ public class Client {
     private States state = States.LOGGING;
     private boolean checkingConnected = false;
     private boolean connected = true;
+    public int health = 100;
 
     public Client(String userName) {
         this.userName = userName;
@@ -47,5 +48,9 @@ public class Client {
 
     public void setConnected(boolean connected) {
         this.connected = connected;
+    }
+
+    public void sethealth(int s) {
+        this.health = s;
     }
 }

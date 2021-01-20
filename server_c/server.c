@@ -25,8 +25,11 @@ users *theusers;
 lobby *thelobby;
 games *thegames;
 logger *thelogger;
-
 pthread_rwlock_t lock;
+
+int lastMessageSocket = 0;
+char *lastMessege = 0;
+int lastMessageID = 0;
 
 void login(int socket, char *name) {
     int i;
@@ -57,6 +60,7 @@ void want_play(users *theusers, lobby **thelobby, games **thegames, int socket, 
 	user *my_user = NULL;
 	user *second_user = NULL;
 	lobby_add_player(thelobby, socket);
+    send_message(socket, "lobby-ack\n", thelogger);
 
 	if (((*thelobby) -> size) >= 2) {
 		int socket_ID_1 = socket;
@@ -69,19 +73,51 @@ void want_play(users *theusers, lobby **thelobby, games **thegames, int socket, 
 		lobby_remove_player(thelobby, socket_ID_1);
 		lobby_remove_player(thelobby, socket_ID_2);								
 		
-		char message_1[100] = "game-started";
-		char message_2[100] = "game-started";
 		char *now_playing = "test";												
 
 		my_user = user_get_user_by_socket_ID(theusers, socket_ID_1);
 		second_user = user_get_user_by_socket_ID(theusers, socket_ID_2);
 
+        printf("socket_ID_1:%d | socket_ID_2:%d\n",socket_ID_1,socket_ID_2);
 		game_add(thegames, my_user -> name, second_user -> name, now_playing);
 		
-		send_message(socket_ID_1, &message_1[0], thelogger);
-		send_message(socket_ID_2, &message_2[0], thelogger);
+		send_message(socket_ID_1, "game-started-1\n", thelogger);
+		send_message(socket_ID_2, "game-started-0\n", thelogger);
+        
 	}
 	return;
+}
+
+void send_users_health(users *theusers, int socket, logger **thelogger, games *thegames){
+    user *my_user = NULL;
+    user *second_user = NULL;
+    game *thegame = NULL;
+    int my_user_health;
+    int second_user_health;
+    
+	my_user = user_get_user_by_socket_ID(theusers, socket);
+    thegame = find_game_by_name(thegames, my_user->name);    
+    
+    if(strcmp(thegame->name_1, my_user->name)==0){
+        second_user = user_get_user_by_name(theusers, thegame->name_2);
+    }else{
+        second_user = user_get_user_by_name(theusers, thegame->name_1);
+    }
+    if(!my_user || !second_user){
+        printf("cant find user in send_user_health.\n");
+        return;
+    }
+    my_user_health = my_user->health;
+    second_user_health = second_user->health;
+
+    char message[20];
+    sprintf(message, "health-%d-%d\n", my_user_health, second_user_health);
+    send_message(socket, &message[0], thelogger);
+}
+
+void processDMG(users *theusers, int socket, logger **thelogger, games *thegames, char *msg){
+    int dmg = atoi(msg+1);
+    printf("recvd dmg %s %d",msg, dmg);
 }
 
 int parse_msg(int socket, char *msg) {
@@ -107,10 +143,22 @@ int parse_msg(int socket, char *msg) {
             return 2;
         case 3:
             pthread_rwlock_rdlock(&lock);
-            want_play(theusers, &thelobby, &thegames, socket, &thelogger);
+            want_play(theusers, &thelobby, &thegames, socket, &thelogger);            
             printf("Received joinLobby request: %s\n", msg);
             pthread_rwlock_unlock(&lock);
             return 3;
+        case 4:
+            pthread_rwlock_rdlock(&lock);
+            send_users_health(theusers, socket, &thelogger, thegames);            
+            printf("Received send_users_health request: %s\n", msg);
+            pthread_rwlock_unlock(&lock);
+            return 4;
+        case 5:
+            pthread_rwlock_rdlock(&lock);
+            processDMG(theusers, socket, &thelogger, thegames, msg);            
+            printf("Received processDMG request: %s\n", msg);
+            pthread_rwlock_unlock(&lock);
+            return 5;
         case 13:
             pthread_rwlock_rdlock(&lock);
             printf("Received ping message, sending response.\n");
@@ -248,7 +296,7 @@ int main(int argc, char *argv[]) {
 	games_create(&thegames);	//as users
 	logger_create(&thelogger);
 
-    server_socket = socket(AF_INET, SOCK_STREAM, 0);
+    server_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     memset(&my_addr, 0, sizeof(struct sockaddr_in));
     my_addr.sin_family = AF_INET;
     my_addr.sin_port = htons(port);

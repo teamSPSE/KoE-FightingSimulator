@@ -35,11 +35,11 @@ void game_create(game **gm, char *name_1, char *name_2, char *now_playing) {
  * @param name_2 - name of player 2
  * @param now_playing - name of player who is on turn
  */
-void game_add(games **all_games, char *name_1, char *name_2, char *now_playing) {printf("3.1\n");
-	(*all_games) -> games_count++;printf("3.1\n");
-	printf("Games count: %d\n", (*all_games) -> games_count);printf("3.1\n");
-	(*all_games) -> games = realloc((*all_games) -> games, (*all_games) -> games_count * sizeof(game));printf("3.1\n");
-	game *game = NULL;printf("3.1\n");
+void game_add(games **all_games, char *name_1, char *name_2, char *now_playing) {
+	(*all_games) -> games_count++;
+	//printf("Games count: %d\n", (*all_games) -> games_count);
+	(*all_games) -> games = realloc((*all_games) -> games, (*all_games) -> games_count * sizeof(game));
+	game *game = NULL;
 	game_create(&game, name_1, name_2, now_playing);
 	(*all_games) -> games[((*all_games) -> games_count) - 1] = game;
 	(*all_games) -> games[((*all_games) -> games_count) - 1] -> game_ID = ((*all_games) -> games_count) - 1;

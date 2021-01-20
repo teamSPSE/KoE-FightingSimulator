@@ -189,7 +189,7 @@ public class Connection {
 
 	public void joinLobby() {
 		String msg = genMsg("", 3);
-		mainWindow.client.setState(States.IN_LOBBY);
+		//mainWindow.client.setState(States.IN_LOBBY);
 		try {
 			msgOut.write(msg.getBytes());
 		} catch (IOException e) {
@@ -197,18 +197,25 @@ public class Connection {
 		}
 	}
 
-	public void sendRecon(String name) {
-		String msg = genMsg(name, 16);
-		//	System.out.println("Sending relogin request: " + msg + ", message size: " + msg.length());
-		//	LOGGER.log(Level.INFO, "Sending relogin request: " + msg + ", message size: " + msg.length());
-		//BattleShips.bytesOut += msg.length();
+	public void getHealt(){
+		String msg = genMsg("", 4);
 		try {
 			msgOut.write(msg.getBytes());
 		} catch (IOException e) {
-			System.out.println("Failed to send relogin message.");
-			//		LOGGER.log(Level.INFO, "Failed to send relogin message.");
+			System.out.println("Failed to send create room message.");
 		}
 	}
+
+	public void sendDMG(int dmg) {
+		System.out.println("dmg:"+dmg);
+		String msg = genMsg(""+dmg, 5);
+		try {
+			msgOut.write(msg.getBytes());
+		} catch (IOException e) {
+			System.out.println("Failed to send create room message.");
+		}
+	}
+
 
 	public Socket getSocket() {
 		return socket;
