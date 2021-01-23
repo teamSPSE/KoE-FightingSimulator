@@ -46,6 +46,7 @@ public class MainWindow {
 	//game
 	public int enemyHealth = 100;
 	public static Random r = new Random();
+	public boolean healthUpdated = false;
 
 	public MainWindow(Stage stage, List<String> args){
 		this.conn = new Connection(args, this);
@@ -188,17 +189,21 @@ public class MainWindow {
 		return stage;
 	}
 
-	public void processGame(String msg) {
+	public void processGame(String msg) throws InterruptedException {
 		String[] p = msg.split("-");
 		Alert alert = new Alert(Alert.AlertType.ERROR);
 		conn.getHealt();
-		if (p[1].equals("started")) {
+		while (healthUpdated){
+			Thread.sleep(1000);
+		}
+		healthUpdated = false;
+
+		if (p[1].equals("started") || p[1].equals("update")) {
 			if(p[2].equals("1")){
 				client.setState(States.YOU_PLAYING);
 			}else if(p[2].equals("0")){
 				client.setState(States.OPPONENT_PLAYING);
 			}
-			conn.getHealt();
 			primaryStage = createArena(primaryStage);
 			return;
 		}else {
@@ -209,20 +214,22 @@ public class MainWindow {
 	}
 
 	public static void load_images(){
-		try {
-			FileInputStream stream = new FileInputStream("img/arena_background.png");
-			arena_background = new Image(stream);
-			stream = new FileInputStream("img/gladiator_attack.png");
-			galdiator_attack_left = new Image(stream);
-			stream = new FileInputStream("img/gladiator_chill.png");
-			galdiator_chill_left = new Image(stream);
-			stream = new FileInputStream("img/gladiator_attack_right.png");
-			galdiator_attack_right = new Image(stream);
-			stream = new FileInputStream("img/gladiator_chill_right.png");
-			galdiator_chill_right = new Image(stream);
+		if(arena_background == null){
+			try {
+				FileInputStream stream = new FileInputStream("img/arena_background.png");
+				arena_background = new Image(stream);
+				stream = new FileInputStream("img/gladiator_attack.png");
+				galdiator_attack_left = new Image(stream);
+				stream = new FileInputStream("img/gladiator_chill.png");
+				galdiator_chill_left = new Image(stream);
+				stream = new FileInputStream("img/gladiator_attack_right.png");
+				galdiator_attack_right = new Image(stream);
+				stream = new FileInputStream("img/gladiator_chill_right.png");
+				galdiator_chill_right = new Image(stream);
 
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -230,33 +237,32 @@ public class MainWindow {
 		stage = onCloseEvent(stage);
 		String currentPlayer = "";
 
-		try {
-			load_images();
-		}
-		catch(Exception e) {
-
-		}
+		load_images();
 
 		GridPane info = new GridPane();
 		info.setHgap(60);
 		info.setVgap(20);
+		
 
-		if (client.getState() == States.YOU_PLAYING) {
-			client.setState(States.OPPONENT_PLAYING);
-			currentPlayer = Constants.playerYou;
-		}
-		else {
-			currentPlayer = Constants.playerOpponent;
-			client.setState(States.OPPONENT_PLAYING);
-		}
-
-		Label nowPlaying = new Label("Now playing: " + currentPlayer);
 		Label playerHealth = new Label("Your HP: " + client.health);
 		Label oponentHealth = new Label("Enemy HP: " + enemyHealth);
 		Button fastAttack = new Button("fast attack");
 		Button normalAttack = new Button("normall attack");
 		Button hardAttack = new Button("hard attack");
 
+		if (client.getState() == States.YOU_PLAYING) {
+			currentPlayer = Constants.playerYou;
+			fastAttack.setDisable(false);
+			normalAttack.setDisable(false);
+			hardAttack.setDisable(false);
+		} else {
+			currentPlayer = Constants.playerOpponent;
+			fastAttack.setDisable(true);
+			normalAttack.setDisable(true);
+			hardAttack.setDisable(true);
+		}
+
+		Label nowPlaying = new Label("Now playing: " + currentPlayer);
 
 		info.add(nowPlaying, 1, 2);
 		info.add(playerHealth, 1, 5);
@@ -305,10 +311,17 @@ public class MainWindow {
 			case 3: dmg = (chance <= 2 ? 50 : 0);break;
 			default: dmg=0;
 		}
+
+		if (client.getState() == States.YOU_PLAYING) {
+			client.setState(States.OPPONENT_PLAYING);
+		}else{
+			client.setState(States.OPPONENT_PLAYING);
+		}
 		conn.sendDMG(dmg);
 	}
 
 	public void sethealth(String msg) {
+		healthUpdated = true;
 		String[] p = msg.split("-");
 		if(p[0].equals("health")){
 			client.sethealth(Integer.parseInt(p[1]));

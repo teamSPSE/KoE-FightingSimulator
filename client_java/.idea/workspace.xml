@@ -2,46 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4413b61f-fe87-44d8-8a26-833da2615950" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/client_java.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/client_java.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/Client.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/Color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/Connection.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/Constants.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/MainWindow$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/MainWindow.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/MessageReader.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/States.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/Client.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/Color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/Connection.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/Constants.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/META-INF/client_java.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/MainWindow$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/MainWindow.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/MessageReader.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/States.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/production/client_java/Connection.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/production/client_java/Constants.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/production/client_java/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/client_java/production/client_java/production/client_java/production/client_java/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Connection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Connection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MainWindow.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/MessageReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MessageReader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../poznamky.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../poznamky.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server_c/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../server_c/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server_c/game.c" beforeDir="false" afterPath="$PROJECT_DIR$/../server_c/game.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server_c/lobby.c" beforeDir="false" afterPath="$PROJECT_DIR$/../server_c/lobby.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/UPSSemestral-1.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/UPSSemestral-1.0.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/UPSrun.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/UPSrun.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../server_c/server.c" beforeDir="false" afterPath="$PROJECT_DIR$/../server_c/server.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server_c/usefc.c" beforeDir="false" afterPath="$PROJECT_DIR$/../server_c/usefc.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server_c/user.c" beforeDir="false" afterPath="$PROJECT_DIR$/../server_c/user.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

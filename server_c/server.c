@@ -116,8 +116,40 @@ void send_users_health(users *theusers, int socket, logger **thelogger, games *t
 }
 
 void processDMG(users *theusers, int socket, logger **thelogger, games *thegames, char *msg){
-    int dmg = atoi(msg+1);
+    int dmg = atoi(msg+2);
     printf("recvd dmg %s %d",msg, dmg);
+    user *my_user = NULL;
+    user *second_user = NULL;
+    game *thegame = NULL;
+    int my_user_health;
+    int second_user_health;
+    
+	my_user = user_get_user_by_socket_ID(theusers, socket);
+    thegame = find_game_by_name(thegames, my_user->name);    
+    
+    if(strcmp(thegame->name_1, my_user->name)==0){
+        second_user = user_get_user_by_name(theusers, thegame->name_2);
+    }else{
+        second_user = user_get_user_by_name(theusers, thegame->name_1);
+    }
+    if(!my_user || !second_user){
+        printf("cant find user in processDMG.\n");
+        return;
+    }
+    second_user->health = second_user->health - dmg;
+/*
+    user *testuser;
+    if(strcmp(thegame->name_1, my_user->name)==0){
+        testuser = user_get_user_by_name(theusers, thegame->name_2);
+    }else{
+        testuser = user_get_user_by_name(theusers, thegame->name_1);
+    }
+
+    printf("updated healt:%d", testuser->health);
+    */
+
+    send_message(my_user->socket, "game-update\n", thelogger);
+    send_message(second_user->socket, "game-update\n", thelogger);
 }
 
 int parse_msg(int socket, char *msg) {
@@ -161,12 +193,12 @@ int parse_msg(int socket, char *msg) {
             return 5;
         case 13:
             pthread_rwlock_rdlock(&lock);
-            printf("Received ping message, sending response.\n");
+            //printf("Received ping message, sending response.\n");
             send(socket, "alive\n", 6, 0);
             pthread_rwlock_unlock(&lock);
             return 13;            
         case 14:
-            printf("Received ping response from socket: %d\n", socket);
+           // printf("Received ping response from socket: %d\n", socket);
             return 14;
         default:
             printf("%s\n", msg);

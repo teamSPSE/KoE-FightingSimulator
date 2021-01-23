@@ -75,7 +75,6 @@ public class MessageReader extends Thread {
 		System.out.println("msg:"+msg);
 		if (msg == null) {
 			System.out.println("Server closed connection. Program will quit.");
-	//		LOGGER.log(Level.INFO, "Server closed connection. Program will quit.");
 			return;
 		}
 
@@ -92,8 +91,14 @@ public class MessageReader extends Thread {
 				System.out.println("Cannot send ping response.");
 			}
 		} else if (p[0].equals("game")) {
-			Platform.runLater(() -> con.mainWindow.processGame(msg));
-		}else if (p[0].equals("health")) {
+			Platform.runLater(() -> {
+				try {
+					con.mainWindow.processGame(msg);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			});
+		} else if (p[0].equals("health")) {
 			Platform.runLater(() -> con.mainWindow.sethealth(msg));
 		} else if (p[0].equals("lobby")) {
 			if(p[1].equals("ack"))
