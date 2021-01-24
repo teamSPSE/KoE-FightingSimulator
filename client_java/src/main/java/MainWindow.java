@@ -225,8 +225,9 @@ public class MainWindow {
 			else
 				finish.setContentText("Something went wrong! We have no winner!\nDo you want to play another match?");
 
-			Optional<ButtonType> result = alert.showAndWait();
+			Optional<ButtonType> result = finish.showAndWait();
 			if (result.get() == ButtonType.OK){
+				play_processed = false;
 				client.setState(States.LOGGED);
 				client.sethealth(100);
 				enemyHealth = 100;
@@ -314,16 +315,20 @@ public class MainWindow {
 		/*
 		ImageView imageView_gladiator_left = new ImageView(galdiator_chill_left);
 		ImageView imageView_gladiator_right = new ImageView(galdiator_chill_right);
-*/
+*
 		HBox arena = new HBox(200);
-		/*arena.getChildren().add(imageView_gladiator_left);
-		arena.getChildren().add(imageView_gladiator_right);*/
+		arena.getChildren().add(imageView_gladiator_left);
+		arena.getChildren().add(imageView_gladiator_right);
 		Background background = new Background(new BackgroundImage(arena_background, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT));
 		arena.setBackground(background);
+		*/
+
+		ImageView ImageView_arena_background = new ImageView(arena_background);
 
 		BorderPane root = new BorderPane();
 		root.setCenter(info);
-		root.setLeft(arena);
+		//root.setLeft(arena);
+		root.setLeft(ImageView_arena_background);
 
 		Scene scene = new Scene(root, Constants.stageWidthArena, Constants.stageHeightArena);
 		stage.setScene(scene);
