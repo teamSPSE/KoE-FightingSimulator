@@ -54,6 +54,7 @@ void login(int socket, char *name) {
 
 void logout(int socket) {
     user_remove(&theusers, &thelobby, socket, &thelogger);
+    send_message(socket, "logo-ack\n", &thelogger);
 }
 
 void want_play(users *theusers, lobby **thelobby, games **thegames, int socket, logger **thelogger) {
@@ -115,17 +116,17 @@ void send_users_health(users *theusers, int socket, logger **thelogger, games *t
     send_message(socket, &message[0], thelogger);
 }
 
-void processDMG(users *theusers, int socket, logger **thelogger, games *thegames, char *msg){
+void processDMG(users *theusers, int socket, logger **thelogger, games **thegames, char *msg){
     int dmg = atoi(msg+2);
     printf("recvd dmg %s %d",msg, dmg);
     user *my_user = NULL;
     user *second_user = NULL;
     game *thegame = NULL;
-    int my_user_health;
-    int second_user_health;
+    char message_1[20];
+    char message_2[20];
     
 	my_user = user_get_user_by_socket_ID(theusers, socket);
-    thegame = find_game_by_name(thegames, my_user->name);    
+    thegame = find_game_by_name(*thegames, my_user->name);    
     
     if(strcmp(thegame->name_1, my_user->name)==0){
         second_user = user_get_user_by_name(theusers, thegame->name_2);
@@ -137,19 +138,22 @@ void processDMG(users *theusers, int socket, logger **thelogger, games *thegames
         return;
     }
     second_user->health = second_user->health - dmg;
-/*
-    user *testuser;
-    if(strcmp(thegame->name_1, my_user->name)==0){
-        testuser = user_get_user_by_name(theusers, thegame->name_2);
+
+    if(second_user->health > 0){
+        sprintf(message_1, "game-update-%d-%d\n", my_user->health, second_user->health);
+        send_message(my_user->socket, &message_1[0], thelogger);
+
+        sprintf(message_2, "game-update-%d-%d\n", second_user->health, my_user->health);
+        send_message(second_user->socket, &message_2[0], thelogger);
     }else{
-        testuser = user_get_user_by_name(theusers, thegame->name_1);
+        printf("game finished\n");
+        game_remove(theusers, thegames, thegame->game_ID, thelogger);
+        my_user->health = 100;
+        second_user->health = 100;
+
+        send_message(my_user->socket, "game-finish-1\n", thelogger);        //winner
+        send_message(second_user->socket, "game-finish-0\n", thelogger);    //looser
     }
-
-    printf("updated healt:%d", testuser->health);
-    */
-
-    send_message(my_user->socket, "game-update\n", thelogger);
-    send_message(second_user->socket, "game-update\n", thelogger);
 }
 
 int parse_msg(int socket, char *msg) {
@@ -187,7 +191,7 @@ int parse_msg(int socket, char *msg) {
             return 4;
         case 5:
             pthread_rwlock_rdlock(&lock);
-            processDMG(theusers, socket, &thelogger, thegames, msg);            
+            processDMG(theusers, socket, &thelogger, &thegames, msg);            
             printf("Received processDMG request: %s\n", msg);
             pthread_rwlock_unlock(&lock);
             return 5;

@@ -1,10 +1,8 @@
+import com.sun.glass.ui.EventLoop;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -16,6 +14,7 @@ import javafx.stage.Stage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 public class MainWindow {
@@ -174,15 +173,17 @@ public class MainWindow {
 	public void play() {
 		conn.joinLobby();
 		this.play_processed = true;
-		client.setState(States.IN_LOBBY);
+		client.setState(States.IN_QUEUE);
 		play.setDisable(true);
 		play.setText("Queued");
 	}
 
 	public Stage onCloseEvent(Stage stage) {
 		stage.setOnCloseRequest(event -> {
-			conn.logout();
-			System.exit(0);
+			if(client.getState() != States.LOGGING)
+				conn.logout();
+			else
+				System.exit(0);
 			return;
 		});
 
@@ -192,13 +193,9 @@ public class MainWindow {
 	public void processGame(String msg) throws InterruptedException {
 		String[] p = msg.split("-");
 		Alert alert = new Alert(Alert.AlertType.ERROR);
-		conn.getHealt();
-		while (healthUpdated){
-			Thread.sleep(1000);
-		}
-		healthUpdated = false;
+		//conn.getHealt();
 
-		if (p[1].equals("started") || p[1].equals("update")) {
+		if (p[1].equals("started")){
 			if(p[2].equals("1")){
 				client.setState(States.YOU_PLAYING);
 			}else if(p[2].equals("0")){
@@ -206,8 +203,41 @@ public class MainWindow {
 			}
 			primaryStage = createArena(primaryStage);
 			return;
-		}else {
-			alert.setHeaderText("Game starting failed!");
+		}else if(p[1].equals("update")){
+			client.sethealth(Integer.parseInt(p[2]));
+			enemyHealth = Integer.parseInt(p[3]);
+
+			if (client.getState() == States.YOU_PLAYING) {
+				client.setState(States.OPPONENT_PLAYING);
+			}else{
+				client.setState(States.YOU_PLAYING);
+			}
+
+			primaryStage = createArena(primaryStage);
+			return;
+		}else if(p[1].equals("finish")){
+			Alert finish = new Alert(Alert.AlertType.CONFIRMATION);
+			finish.setHeaderText("Game finished!");
+			if(p[2].equals("1"))
+				finish.setContentText("You are the WINNER!!!\nDo you want to play another match?");
+			else if(p[2].equals("0"))
+				finish.setContentText("You have lost :(\nDo you want to play another match?");
+			else
+				finish.setContentText("Something went wrong! We have no winner!\nDo you want to play another match?");
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK){
+				client.setState(States.LOGGED);
+				client.sethealth(100);
+				enemyHealth = 100;
+				primaryStage = createLobbyStage(primaryStage);
+			} else {
+				conn.logout();
+			}
+
+			return;
+		} else {
+			alert.setHeaderText("Game failed!");
 			alert.setContentText("Something went wrong");
 			alert.show();
 		}
@@ -218,14 +248,14 @@ public class MainWindow {
 			try {
 				FileInputStream stream = new FileInputStream("img/arena_background.png");
 				arena_background = new Image(stream);
-				stream = new FileInputStream("img/gladiator_attack.png");
+				/*stream = new FileInputStream("img/gladiator_attack.png");
 				galdiator_attack_left = new Image(stream);
 				stream = new FileInputStream("img/gladiator_chill.png");
 				galdiator_chill_left = new Image(stream);
 				stream = new FileInputStream("img/gladiator_attack_right.png");
 				galdiator_attack_right = new Image(stream);
 				stream = new FileInputStream("img/gladiator_chill_right.png");
-				galdiator_chill_right = new Image(stream);
+				galdiator_chill_right = new Image(stream);*/
 
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -242,7 +272,7 @@ public class MainWindow {
 		GridPane info = new GridPane();
 		info.setHgap(60);
 		info.setVgap(20);
-		
+
 
 		Label playerHealth = new Label("Your HP: " + client.health);
 		Label oponentHealth = new Label("Enemy HP: " + enemyHealth);
@@ -281,13 +311,13 @@ public class MainWindow {
 			countAttack(3);
 		});
 
-
+		/*
 		ImageView imageView_gladiator_left = new ImageView(galdiator_chill_left);
 		ImageView imageView_gladiator_right = new ImageView(galdiator_chill_right);
-
+*/
 		HBox arena = new HBox(200);
-		arena.getChildren().add(imageView_gladiator_left);
-		arena.getChildren().add(imageView_gladiator_right);
+		/*arena.getChildren().add(imageView_gladiator_left);
+		arena.getChildren().add(imageView_gladiator_right);*/
 		Background background = new Background(new BackgroundImage(arena_background, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT));
 		arena.setBackground(background);
 
@@ -311,21 +341,16 @@ public class MainWindow {
 			case 3: dmg = (chance <= 2 ? 50 : 0);break;
 			default: dmg=0;
 		}
-
-		if (client.getState() == States.YOU_PLAYING) {
-			client.setState(States.OPPONENT_PLAYING);
-		}else{
-			client.setState(States.OPPONENT_PLAYING);
-		}
 		conn.sendDMG(dmg);
 	}
-
+/*
 	public void sethealth(String msg) {
 		healthUpdated = true;
 		String[] p = msg.split("-");
 		if(p[0].equals("health")){
 			client.sethealth(Integer.parseInt(p[1]));
 			enemyHealth = Integer.parseInt((p[2]));
+			System.out.println("here");
 		}
-	}
+	}*/
 }

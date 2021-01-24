@@ -83,7 +83,9 @@ public class MessageReader extends Thread {
 			Platform.runLater(() -> con.mainWindow.processLogin(msg));
 			System.out.println(msg);
 		} else if(p[0].equals("logo")){
-			System.out.println(msg);
+			if(p[1].equals("ack")){
+				System.exit(1);
+			}
 		} else if (p[0].equals("ping")) {
 			try {
 				msgOut.write(pingRespMsg.getBytes());
@@ -98,9 +100,9 @@ public class MessageReader extends Thread {
 					e.printStackTrace();
 				}
 			});
-		} else if (p[0].equals("health")) {
+		}/* else if (p[0].equals("health")) {
 			Platform.runLater(() -> con.mainWindow.sethealth(msg));
-		} else if (p[0].equals("lobby")) {
+		}*/ else if (p[0].equals("lobby")) {
 			if(p[1].equals("ack"))
 				System.out.println("Succesfully joined lobby.");
 		} else if (p[0].equals("alive")) {

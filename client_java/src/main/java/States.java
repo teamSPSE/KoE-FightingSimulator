@@ -1,7 +1,7 @@
 public enum States {
     LOGGING(-1),
-    IN_LOBBY(0),
-    WANNA_PLAY(1),
+    LOGGED(0),
+    IN_QUEUE(1),
     DISCONNECT(2),
     YOU_PLAYING(3),
     OPPONENT_PLAYING(4);

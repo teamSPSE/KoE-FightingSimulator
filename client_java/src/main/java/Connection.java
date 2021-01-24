@@ -196,7 +196,7 @@ public class Connection {
 			System.out.println("Failed to send create room message.");
 		}
 	}
-
+/*
 	public void getHealt(){
 		String msg = genMsg("", 4);
 		try {
@@ -205,7 +205,7 @@ public class Connection {
 			System.out.println("Failed to send create room message.");
 		}
 	}
-
+*/
 	public void sendDMG(int dmg) {
 		System.out.println("dmg:"+dmg);
 		String msg = genMsg(""+dmg, 5);
