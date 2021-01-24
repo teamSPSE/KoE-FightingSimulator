@@ -13,5 +13,6 @@ struct the_lobby {
 void lobby_create(lobby **thelobby);
 void lobby_add_player(lobby **thelobby, int socket_ID);
 void lobby_remove_player(lobby **thelobby, int socket_ID);
+void print_lobby(lobby *thelobby);
 
 #endif

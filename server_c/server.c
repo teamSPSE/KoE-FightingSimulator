@@ -31,6 +31,12 @@ int lastMessageSocket = 0;
 char *lastMessege = 0;
 int lastMessageID = 0;
 
+void print_all_vars(){
+    print_all_users(theusers);
+    print_all_games(thegames);
+    print_lobby(thelobby);
+}
+
 void login(int socket, char *name) {
     int i;
     if (theusers -> user_count == MAX_USERS) {
@@ -52,43 +58,44 @@ void login(int socket, char *name) {
 	send_message(socket, "logi-ack\n", &thelogger);
 }
 
+
 void logout(int socket) {
+    print_all_vars();
     user_remove(&theusers, &thelobby, socket, &thelogger);
     send_message(socket, "logo-ack\n", &thelogger);
 }
 
-void want_play(users *theusers, lobby **thelobby, games **thegames, int socket, logger **thelogger) {
+
+void want_play(int socket) {
 	user *my_user = NULL;
 	user *second_user = NULL;
-	lobby_add_player(thelobby, socket);
-    send_message(socket, "lobby-ack\n", thelogger);
+	lobby_add_player(&thelobby, socket);
+    send_message(socket, "lobby-ack\n", &thelogger);
 
-	if (((*thelobby) -> size) >= 2) {
+	if (thelobby -> size >= 2) {
 		int socket_ID_1 = socket;
 		int socket_ID_2;
 		do {
-			socket_ID_2 = (*thelobby) -> socket_IDs[rand() % ((*thelobby) -> size)];
+			socket_ID_2 = thelobby -> socket_IDs[rand() % (thelobby -> size)];
 		} 
 		while(socket_ID_2 == socket_ID_1);								
 
-		lobby_remove_player(thelobby, socket_ID_1);
-		lobby_remove_player(thelobby, socket_ID_2);								
-		
-		char *now_playing = "test";												
+		lobby_remove_player(&thelobby, socket_ID_1);
+		lobby_remove_player(&thelobby, socket_ID_2);																			
 
 		my_user = user_get_user_by_socket_ID(theusers, socket_ID_1);
 		second_user = user_get_user_by_socket_ID(theusers, socket_ID_2);
 
         printf("socket_ID_1:%d | socket_ID_2:%d\n",socket_ID_1,socket_ID_2);
-		game_add(thegames, my_user -> name, second_user -> name, now_playing);
+		game_add(&thegames, my_user -> name, second_user -> name);
 		
-		send_message(socket_ID_1, "game-started-1\n", thelogger);
-		send_message(socket_ID_2, "game-started-0\n", thelogger);
+		send_message(socket_ID_1, "game-started-1\n", &thelogger);
+		send_message(socket_ID_2, "game-started-0\n", &thelogger);
         
 	}
 	return;
 }
-
+/*
 void send_users_health(users *theusers, int socket, logger **thelogger, games *thegames){
     user *my_user = NULL;
     user *second_user = NULL;
@@ -114,9 +121,9 @@ void send_users_health(users *theusers, int socket, logger **thelogger, games *t
     char message[20];
     sprintf(message, "health-%d-%d\n", my_user_health, second_user_health);
     send_message(socket, &message[0], thelogger);
-}
+}*/
 
-void processDMG(users *theusers, int socket, logger **thelogger, games **thegames, char *msg){
+void processDMG(int socket, char *msg){
     int dmg = atoi(msg+2);
     printf("recvd dmg %s %d",msg, dmg);
     user *my_user = NULL;
@@ -126,7 +133,7 @@ void processDMG(users *theusers, int socket, logger **thelogger, games **thegame
     char message_2[20];
     
 	my_user = user_get_user_by_socket_ID(theusers, socket);
-    thegame = find_game_by_name(*thegames, my_user->name);    
+    thegame = find_game_by_name(thegames, my_user->name);    
     
     if(strcmp(thegame->name_1, my_user->name)==0){
         second_user = user_get_user_by_name(theusers, thegame->name_2);
@@ -141,18 +148,18 @@ void processDMG(users *theusers, int socket, logger **thelogger, games **thegame
 
     if(second_user->health > 0){
         sprintf(message_1, "game-update-%d-%d\n", my_user->health, second_user->health);
-        send_message(my_user->socket, &message_1[0], thelogger);
+        send_message(my_user->socket, &message_1[0], &thelogger);
 
         sprintf(message_2, "game-update-%d-%d\n", second_user->health, my_user->health);
-        send_message(second_user->socket, &message_2[0], thelogger);
+        send_message(second_user->socket, &message_2[0], &thelogger);
     }else{
         printf("game finished\n");
-        game_remove(theusers, thegames, thegame->game_ID, thelogger);
+        game_remove(&thegames, thegame->game_ID);
         my_user->health = 100;
         second_user->health = 100;
 
-        send_message(my_user->socket, "game-finish-1\n", thelogger);        //winner
-        send_message(second_user->socket, "game-finish-0\n", thelogger);    //looser
+        send_message(my_user->socket, "game-finish-1\n", &thelogger);        //winner
+        send_message(second_user->socket, "game-finish-0\n", &thelogger);    //looser
     }
 }
 
@@ -167,32 +174,32 @@ int parse_msg(int socket, char *msg) {
     switch (type) {
         case 1:
             pthread_rwlock_rdlock(&lock);
-            login(socket, msg + 2);
             printf("Received login request: %s\n", msg);
+            login(socket, msg + 2);
             pthread_rwlock_unlock(&lock);
             return 1;
         case 2:
             pthread_rwlock_rdlock(&lock);
-            logout(socket);
             printf("Received logout request: %s\n", msg);
+            logout(socket);
             pthread_rwlock_unlock(&lock);
             return 2;
         case 3:
-            pthread_rwlock_rdlock(&lock);
-            want_play(theusers, &thelobby, &thegames, socket, &thelogger);            
+            pthread_rwlock_rdlock(&lock);         
             printf("Received joinLobby request: %s\n", msg);
+            want_play(socket);   
             pthread_rwlock_unlock(&lock);
             return 3;
-        case 4:
-            pthread_rwlock_rdlock(&lock);
-            send_users_health(theusers, socket, &thelogger, thegames);            
+        /*case 4:
+            pthread_rwlock_rdlock(&lock);         
             printf("Received send_users_health request: %s\n", msg);
+            send_users_health(theusers, socket, &thelogger, thegames);   
             pthread_rwlock_unlock(&lock);
-            return 4;
+            return 4;*/
         case 5:
-            pthread_rwlock_rdlock(&lock);
-            processDMG(theusers, socket, &thelogger, &thegames, msg);            
+            pthread_rwlock_rdlock(&lock);         
             printf("Received processDMG request: %s\n", msg);
+            processDMG(socket, msg);   
             pthread_rwlock_unlock(&lock);
             return 5;
         case 13:

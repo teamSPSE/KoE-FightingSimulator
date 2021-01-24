@@ -1,4 +1,6 @@
 
+import javafx.scene.control.Alert;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -19,6 +21,7 @@ public class Connection {
 	private MessageReader mr = null;
 	private String addr = "192.168.50.3";
 	private int port = 10000;
+	public Alert alert = new Alert(Alert.AlertType.ERROR);
 
 	public Connection(List<String> args, MainWindow mainWindow) {
 		switch(args.size()) {
@@ -80,24 +83,31 @@ public class Connection {
 		} catch (IOException e2) {
 		}
 		if (socket == null) {
+			alert.setHeaderText("Failed to connect.");
+			alert.setContentText("");
+			alert.show();
 			System.out.println("Failed to connect.");
 			return false;
 		}
 		try {
 			socket.setSoTimeout(3 * 1000);
 		} catch (SocketException e1) {
-//			LOGGER.log(Level.INFO, "Failed to set socket timeout.");
 			System.out.println("Failed to connect.");
+			alert.setHeaderText("Failed to connect.");
+			alert.setContentText("");
+			alert.show();
+			return false;
 		}
 		InetAddress adr = socket.getInetAddress();
-	//	LOGGER.log(Level.INFO, "Connecting to: " + adr.getHostAddress());
 		System.out.println("Connecting to: " + adr.getHostAddress());
 
 		try {
 			msgOut = new DataOutputStream(socket.getOutputStream());
 		} catch (IOException e) {
 			System.out.println("Failed to connect.");
-	//		LOGGER.log(Level.INFO, "Failed to conect.");
+			alert.setHeaderText("Failed to connect.");
+			alert.setContentText("");
+			alert.show();
 			return false;
 		}
 		mr = new MessageReader(this, socket, msgOut);
@@ -162,6 +172,9 @@ public class Connection {
 			msgOut.flush();
 		} catch (IOException e) {
 			System.out.println("Failed to send test message.");
+			alert.setHeaderText("Failed to send test message.");
+			alert.setContentText("");
+			alert.show();
 			e.printStackTrace();
 		}
 	}
@@ -173,6 +186,9 @@ public class Connection {
 			msgOut.write(msg.getBytes());
 		} catch (IOException e) {
 			System.out.println("Failed to send login message.");
+			alert.setHeaderText("Failed to send login message.");
+			alert.setContentText("");
+			alert.show();
 			e.printStackTrace();
 		}
 	}
@@ -183,7 +199,9 @@ public class Connection {
 			msgOut.write(msg.getBytes());
 		} catch (IOException e) {
 			System.out.println("Failed to send logout message.");
-	//		LOGGER.log(Level.INFO, "Failed to send logout message.");
+			alert.setHeaderText("Failed to send logout message.");
+			alert.setContentText("");
+			alert.show();
 		}
 	}
 
@@ -193,7 +211,10 @@ public class Connection {
 		try {
 			msgOut.write(msg.getBytes());
 		} catch (IOException e) {
-			System.out.println("Failed to send create room message.");
+			System.out.println("Failed to send join lobby message.");
+			alert.setHeaderText("Failed to send join lobby message.");
+			alert.setContentText("");
+			alert.show();
 		}
 	}
 /*
@@ -212,7 +233,10 @@ public class Connection {
 		try {
 			msgOut.write(msg.getBytes());
 		} catch (IOException e) {
-			System.out.println("Failed to send create room message.");
+			System.out.println("Failed to send damage message.");
+			alert.setHeaderText("Failed to send damage message.");
+			alert.setContentText("");
+			alert.show();
 		}
 	}
 

@@ -21,11 +21,10 @@ void games_create(games **all_games) {
  * @param name_2 - name of player 2
  * @param now_playing - name of player who is on turn
  */
-void game_create(game **gm, char *name_1, char *name_2, char *now_playing) {
-	(*gm) = calloc(1, sizeof(game));
-	(*gm) -> name_1 = name_1;
-	(*gm) -> name_2 = name_2;
-	(*gm) -> now_playing = now_playing;
+void game_create(game **all_games, char *name_1, char *name_2) {
+	(*all_games) = calloc(1, sizeof(game));
+	(*all_games) -> name_1 = name_1;
+	(*all_games) -> name_2 = name_2;
 }
 
 /*
@@ -35,12 +34,12 @@ void game_create(game **gm, char *name_1, char *name_2, char *now_playing) {
  * @param name_2 - name of player 2
  * @param now_playing - name of player who is on turn
  */
-void game_add(games **all_games, char *name_1, char *name_2, char *now_playing) {
+void game_add(games **all_games, char *name_1, char *name_2) {
 	(*all_games) -> games_count++;
 	//printf("Games count: %d\n", (*all_games) -> games_count);
 	(*all_games) -> games = realloc((*all_games) -> games, (*all_games) -> games_count * sizeof(game));
 	game *game = NULL;
-	game_create(&game, name_1, name_2, now_playing);
+	game_create(&game, name_1, name_2);
 	(*all_games) -> games[((*all_games) -> games_count) - 1] = game;
 	(*all_games) -> games[((*all_games) -> games_count) - 1] -> game_ID = ((*all_games) -> games_count) - 1;
 }
@@ -52,7 +51,7 @@ void game_add(games **all_games, char *name_1, char *name_2, char *now_playing) 
  * @param name_2 - structures to save info about server
  * @param game_ID - ID of game
  */
-void game_remove(users *usrs, games **all_games, int game_ID, logger **log) {
+void game_remove(games **all_games, int game_ID) {
 	int i;
 	int count = (*all_games) -> games_count;
 	int index;
@@ -74,23 +73,7 @@ void game_remove(users *usrs, games **all_games, int game_ID, logger **log) {
 			}
 			break;
 		}
-	}
-	
-	if (update_game_ID == 1) {
-		char message_1[30];
-		sprintf(message_1, "update_game_ID;%d;\n", index);
-		char message_2[30];
-		sprintf(message_2, "update_game_ID;%d;\n", index);
-
-		user *user_1 = user_get_user_by_name(usrs, (*all_games) -> games[index] -> name_1);
-		printf("sending msg to %s: %s\n", user_1 -> name, &message_1[0]);
-		send_message(user_1 -> socket, &message_1[0], log);
-
-		user *user_2 = user_get_user_by_name(usrs, (*all_games) -> games[index] -> name_2);
-		printf("sending msg to %s: %s\n", user_2 -> name, &message_2[0]);
-		send_message(user_2 -> socket, &message_2[0], log);
-	}
-	
+	}	
 }
 
 /*
@@ -109,28 +92,12 @@ game *find_game_by_name(games *all_games, char *name) {
 	return NULL;
 }
 
-/*
- * end game 
- * @param cls - array of clients 
- * @param all_games - array of all games
- * @param game_ID - ID of game
- * @param status - status of first player
- * @param status_opponent - status of opponent
- * @param current_player_socket_ID - socket ID of current player
- * @param second_player_socket_ID - socket ID of opponent
- * @param info - structures to save log info
- */
-void game_end(users *usrs, games **all_games, int game_ID, int status, int status_opponent, int current_player_socket_ID, int second_player_socket_ID, logger **log) {
-	switch(status_opponent) {
-		case 0: 			
-			break;
+void print_all_games(games *all_games){
+	int count = all_games->games_count;
+	int i;
 
-		case 1:				
-			break;
+	printf("\nprinting all games:\n");
+	for(i = 0; i < count; i++){
+		printf("[%d] gameID:%d name1:%s name2:%s\n", i, all_games->games[i]->game_ID, all_games->games[i]->name_1, all_games->games[i]->name_2);
 	}
-	
-	user *cl_1 = user_get_user_by_socket_ID(usrs, current_player_socket_ID);
-	user *cl_2 = user_get_user_by_socket_ID(usrs, second_player_socket_ID);
-	game_remove(usrs, all_games, game_ID, log);
-	return;
 }

@@ -38,6 +38,14 @@ void user_create(user **usr, char *name, int socket_ID) {
 }
 
 void user_add(users **usrs, char *name, int socket_ID, logger **log) {
+	user *usr = NULL;
+	user_create(&usr, name, socket_ID);
+    if (!usr) {
+        printf("Error, couldn't create new user.\n");
+        printf("Sent message: logi-nack\n");
+		send_message(socket_ID, "logi-nack\n", log);
+        return;
+    }	
 	(*usrs) -> user_count++;
 
 	printf("Users count: %d\n", (*usrs) -> user_count);
@@ -46,14 +54,7 @@ void user_add(users **usrs, char *name, int socket_ID, logger **log) {
         printf("Users memory realocation err in user_add!\n");
         return;
     }
-	user *usr = NULL;
-	user_create(&usr, name, socket_ID);
-    if (!usr) {
-        printf("Error, couldn't create new user.\n");
-        printf("Sent message: logi-nack\n");
-		send_message(socket_ID, "logi-nack\n", log);
-        return;
-    }
+	
 	(*usrs) -> users[((*usrs) -> user_count) - 1] = usr;
 	return;
 }
@@ -62,24 +63,21 @@ void user_remove(users **usrs, lobby **thelobby, int socket_ID, logger **log) {
 	int i;
 	int count = (*usrs) -> user_count;
 	int socket;	
+	char *name = user_get_user_by_socket_ID(*usrs, socket_ID)->name;
+
 	for (i = 0; i < count; i++) {
 		socket = (*usrs) -> users[i] -> socket;
 		if (socket == socket_ID) {
-			lobby_remove_player(thelobby, socket_ID);
-			(*usrs) -> user_count--;			
+			lobby_remove_player(thelobby, socket_ID);	
+			(*usrs) -> user_count--;	
 			if (i < (count - 1)) {
 				free((*usrs) -> users[i]);
 				(*usrs) -> users[i] = (*usrs) -> users[((*usrs) -> user_count)];								
 			}
-			(*usrs) -> users[((*usrs) -> user_count)] = NULL;			
-			(*usrs) -> users = realloc((*usrs) -> users, (*usrs) -> user_count * sizeof(user));
-            if(!(*usrs) -> users){
-                printf("Users memory realocation err in user_remove!\n");
-				printf("Sent message: logo-nack\n");
-                return;
-            }            
-            printf("User %s logged out\n", (*usrs) -> users[i] -> name);
-		    send_message(socket_ID, "logo-ack\n", log);
+			(*usrs) -> users[((*usrs) -> user_count)] = NULL;	
+			(*usrs) -> users = realloc((*usrs) -> users, (*usrs) -> user_count * sizeof(user));  
+		    send_message(socket_ID, "logo-ack\n", log);                   
+            printf("User %s logged out\n", name);
 			printf("Actually logged users: %d\n", (*usrs) -> user_count);	
 			return;
 		}
@@ -114,4 +112,14 @@ user *user_get_user_by_socket_ID(users *usrs, int socket_ID) {
 		}
 	}
 	return NULL;
+}
+
+void print_all_users(users *usrs){
+	int count = usrs->user_count;
+	int i;
+
+	printf("\nprinting all users:\n");
+	for(i = 0; i < count; i++){
+		printf("[%d] name:%s health:%d socket:%d\n", i, usrs->users[i]->name, usrs->users[i]->health, usrs->users[i]->socket);
+	}
 }

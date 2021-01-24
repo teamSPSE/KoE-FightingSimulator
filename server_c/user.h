@@ -21,4 +21,5 @@ void user_add(users **usrs, char *name, int socket_ID, logger **log);
 void user_remove(users **usrs, lobby **thelobby, int socket_ID, logger **log);
 user *user_get_user_by_name(users *usrs, char *name);
 user *user_get_user_by_socket_ID(users *usrs, int socket_ID);
+void print_all_users(users *usrs);
 #endif

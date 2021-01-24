@@ -19,9 +19,10 @@ import java.util.Random;
 
 public class MainWindow {
 	private Connection conn;
-	private Stage primaryStage;
+	private Stage primaryStage = null;
 	public Client client = null;
 	public Boolean play_processed = false;
+	public boolean connected = false;
 
 	//login
 	public Label nameOfGame = new Label(Constants.gameTitle);
@@ -51,14 +52,15 @@ public class MainWindow {
 		this.conn = new Connection(args, this);
 		String host = "192.168.50.3";
 		int port = 10000;
-		this.conn.connect(host, port);
+		connected = this.conn.connect(host, port);
 		this.primaryStage = createLoginStage(stage);
 		this.client = new Client("");
 	}
 
 
 	public void show() {
-		this.primaryStage.show();
+		if(connected)
+			this.primaryStage.show();
 	}
 
 	public Stage createLoginStage(Stage stage) {
@@ -233,6 +235,7 @@ public class MainWindow {
 				enemyHealth = 100;
 				primaryStage = createLobbyStage(primaryStage);
 			} else {
+				System.out.println("player cancel:"+client.getUserName());
 				conn.logout();
 			}
 
@@ -341,7 +344,7 @@ public class MainWindow {
 		int dmg = 0;
 		int chance = r.nextInt(10);
 		switch (i){
-			case 1: dmg = (chance <= 7 ? 20 : 0);break;
+			case 1: dmg = 100;break;//(chance <= 7 ? 20 : 0);break;
 			case 2: dmg = (chance <= 5 ? 40 : 0);break;
 			case 3: dmg = (chance <= 2 ? 50 : 0);break;
 			default: dmg=0;

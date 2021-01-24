@@ -15,10 +15,10 @@ void lobby_create(lobby **thelobby) {
  */
 void lobby_add_player(lobby **thelobby, int socket_ID) {
 	(*thelobby) -> size++;
-	//printf("socket_ID %d want to play a game\n", socket_ID);
+	printf("socket_ID %d want to play a game\n", socket_ID);
 	(*thelobby) -> socket_IDs = realloc((*thelobby) -> socket_IDs, (*thelobby) -> size * sizeof(int));
 	(*thelobby) -> socket_IDs[((*thelobby) -> size) - 1] = socket_ID;
-	//printf("%d client/s want to play a game\n", (*thelobby) -> size);
+	printf("%d client/s want to play a game\n", (*thelobby) -> size);
 }
 
 /*
@@ -38,9 +38,20 @@ void lobby_remove_player(lobby **thelobby, int socket_ID) {
 				(*thelobby) -> socket_IDs[i] = (*thelobby) -> socket_IDs[((*thelobby) -> size)];								
 			}	
 			(*thelobby) -> socket_IDs = realloc((*thelobby) -> socket_IDs, (*thelobby) -> size * sizeof(lobby));
-			//printf("socket ID %d removed from queue\n", socket_ID);
-			//printf("%d client/s want to play a game\n", (*thelobby) -> size);
+			printf("socket ID %d removed from queue\n", socket_ID);
+			printf("%d client/s want to play a game\n", (*thelobby) -> size);
 			return;
 		}
+	}
+}
+
+
+void print_lobby(lobby *thelobby){
+	int count = thelobby->size;
+	int i;
+
+	printf("\nprinting lobby:\n");
+	for(i = 0; i < count; i++){
+		printf("[%d] socketID:%d\n", i, thelobby->socket_IDs[i]);
 	}
 }
