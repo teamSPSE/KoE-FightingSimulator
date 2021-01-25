@@ -11,7 +11,7 @@ void send_message(int user_socket, char *message, logger **info) {
     int ok;
 	ok = send(user_socket, message, strlen(message) * sizeof(char), 0);	
     
-	printf("%d Writed message: %s [%d] ok:%d\n", user_socket, message, strlen(message), ok);
+	printf("%d Writed message: %s (%d) ok:%d\n", user_socket, message, strlen(message), ok);
 	(*info) -> bytes_out += strlen(message) + 1;
 	return;
 }

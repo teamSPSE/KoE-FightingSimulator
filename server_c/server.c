@@ -39,6 +39,7 @@ void print_all_vars(){
 
 void login(int socket, char *name) {
     int i;
+    game *tmp_game;
     if (theusers -> user_count == MAX_USERS) {
         printf("Couldn't login user: %s. Maximum of logged in players reached.\n", name);
         printf("Sent message: logi-nackfull\n");
@@ -56,13 +57,21 @@ void login(int socket, char *name) {
     printf("User :%s logged in.\n", name);
     printf("Sent message: logi-ack\n");
 	send_message(socket, "logi-ack\n", &thelogger);
+
+    tmp_game = find_game_by_name(thegames, name);
+    if(tmp_game != NULL){
+        printf("user %s is in a game (%d)!\n", name, tmp_game->game_ID);
+        send_message(socket, "game-reconnected-10-10\n", &thelogger);   //game-reconnected-myhealth-enemyhealth
+    }
 }
 
 
 void logout(int socket) {
-    print_all_vars();
-    user_remove(&theusers, &thelobby, socket, &thelogger);
-    send_message(socket, "logo-ack\n", &thelogger);
+    if(user_get_user_by_socket_ID(theusers, socket) != NULL){
+        print_all_vars();
+        user_remove(&theusers, &thelobby, socket, &thelogger);
+        //send_message(socket, "logo-ack\n", &thelogger);
+    }
 }
 
 
@@ -142,6 +151,18 @@ void processDMG(int socket, char *msg){
     }
     if(!my_user || !second_user){
         printf("cant find user in processDMG.\n");
+        if(my_user == NULL && second_user != NULL){
+            printf("user with socket %d is disconnected, wait for him\n", socket);
+            send_message(second_user->socket, "game-userdsc\n", &thelogger);
+        }
+        if(my_user != NULL && second_user == NULL){
+            printf("second user is disconnected, wait for him\n");
+            send_message(my_user->socket, "game-userdsc\n", &thelogger);
+        }
+        if(!my_user && !second_user){
+            printf("both players are disconnected -> game will be removed\n");
+            game_remove(&thegames, thegame->game_ID);
+        }
         return;
     }
     second_user->health = second_user->health - dmg;
@@ -205,7 +226,7 @@ int parse_msg(int socket, char *msg) {
         case 13:
             pthread_rwlock_rdlock(&lock);
             //printf("Received ping message, sending response.\n");
-            send(socket, "alive\n", 6, 0);
+            //send(socket, "alive\n", 6, 0);
             pthread_rwlock_unlock(&lock);
             return 13;            
         case 14:
@@ -229,7 +250,7 @@ void *connection_handler(void *arg) {
         memset(msg, '\0', sizeof(msg));
         memset(msg_size, '\0', sizeof(msg_size));
         val = recv(client_sock, msg_size, 3, 0);
-
+/*
         while (val < 0 && missed_ping < 12) {
 
             if (missed_ping == 1) {
@@ -243,14 +264,15 @@ void *connection_handler(void *arg) {
         }
 
         if (missed_ping == 12) {
-            logout(client_sock);
             printf("Closing connection. Socket: %d\n", client_sock);
+            logout(client_sock);
+            close(client_sock);
             free(arg);
             return 0;
         }
 
         missed_ping = 0;
-
+*/
         size_rec = strtol(msg_size, NULL, 10);
 
         if (size_rec > 0) {
@@ -335,11 +357,11 @@ int main(int argc, char *argv[]) {
     }
 
     users_create(&theusers);		//struktura obsahujici pole struktur
-	lobby_create(&thelobby);	//ukazatel na strukturu
-	games_create(&thegames);	//as users
+	lobby_create(&thelobby);	    //ukazatel na strukturu
+	games_create(&thegames);	    //as users
 	logger_create(&thelogger);
 
-    server_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    server_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);    //0 - udp | IPPROTO_TCP - tcp
     memset(&my_addr, 0, sizeof(struct sockaddr_in));
     my_addr.sin_family = AF_INET;
     my_addr.sin_port = htons(port);
@@ -389,6 +411,7 @@ int main(int argc, char *argv[]) {
             *th_socket = client_socket;
             printf("[%d] New connection.\n",client_socket);
             pthread_create(&thread_id, NULL, (void *) &connection_handler, (void *) th_socket);
+            //pthread_detach(thread_id);
         } else {
             printf("Fatal ERROR\n");
             return -1;

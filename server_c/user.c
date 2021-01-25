@@ -76,7 +76,7 @@ void user_remove(users **usrs, lobby **thelobby, int socket_ID, logger **log) {
 			}
 			(*usrs) -> users[((*usrs) -> user_count)] = NULL;	
 			(*usrs) -> users = realloc((*usrs) -> users, (*usrs) -> user_count * sizeof(user));  
-		    send_message(socket_ID, "logo-ack\n", log);                   
+		    //send_message(socket_ID, "logo-ack\n", log);                   
             printf("User %s logged out\n", name);
 			printf("Actually logged users: %d\n", (*usrs) -> user_count);	
 			return;
@@ -84,7 +84,7 @@ void user_remove(users **usrs, lobby **thelobby, int socket_ID, logger **log) {
 	}    
     printf("Failed to log out user [%d]\n", socket_ID);
     printf("Sent message: logo-nack\n");
-	send_message(socket_ID, "logo-nack\n", log);
+	//send_message(socket_ID, "logo-nack\n", log);
 	return;
 }
 

@@ -1,15 +1,9 @@
 
 import javafx.application.Platform;
-import javafx.scene.control.Alert;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
-//import javafx.application.Platform;
 
 public class MessageReader extends Thread {
 
@@ -84,7 +78,8 @@ public class MessageReader extends Thread {
 			System.out.println(msg);
 		} else if(p[0].equals("logo")){
 			if(p[1].equals("ack")){
-				System.exit(1);
+				Platform.exit();
+				System.exit(0);
 			}
 		} else if (p[0].equals("ping")) {
 			try {

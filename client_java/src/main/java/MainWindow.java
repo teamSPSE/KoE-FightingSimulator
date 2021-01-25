@@ -1,6 +1,5 @@
-import com.sun.glass.ui.EventLoop;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -13,6 +12,7 @@ import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -182,13 +182,27 @@ public class MainWindow {
 
 	public Stage onCloseEvent(Stage stage) {
 		stage.setOnCloseRequest(event -> {
-			if(client.getState() != States.LOGGING)
-				conn.logout();
-			else
-				System.exit(0);
+			Alert alert = new Alert(Alert.AlertType.WARNING);
+			alert.setTitle(null);
+			alert.setHeaderText(null);
+			alert.setContentText("Application will be closed");
+			alert.getButtonTypes().add(ButtonType.CANCEL);
+			alert.showAndWait();
+			if(alert.getResult() == ButtonType.OK) {
+				if(client.getState() != States.LOGGING){
+					System.out.println("odhlásit");
+					conn.logout();
+				}else {
+					System.out.println("zavřív app");
+					Platform.exit();
+					System.exit(0);
+				}
+			}
+			else {
+				event.consume();
+			}
 			return;
 		});
-
 		return stage;
 	}
 
@@ -240,6 +254,14 @@ public class MainWindow {
 			}
 
 			return;
+		} else if(p[1].equals("userdsc")){
+			alert.setHeaderText("Opponent is disconnected!");
+			alert.setContentText("We could not send your dmg because opponenct is disconnected. Try again in a moment.");
+			alert.show();
+		} else if(p[1].equals("reconnected")){
+			client.sethealth(Integer.parseInt(p[2]));
+			enemyHealth = Integer.parseInt(p[3]);
+			primaryStage = createArena(primaryStage);
 		} else {
 			alert.setHeaderText("Game failed!");
 			alert.setContentText("Something went wrong");
