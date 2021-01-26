@@ -26,7 +26,7 @@ struct the_games {
 
 
 void games_create(games **all_games);
-void game_create(game **all_games, char *name_1, char *name_2, char *now_playing_name);
+void game_create(game **thegame, char *name_1, char *name_2, char *now_playing_name);
 void game_add(games **all_games, char *name_1, char *name_2, char *now_playing_name);
 void game_remove(games **all_games, int game_ID);
 game *find_game_by_name(games *all_games, char *name);

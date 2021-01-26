@@ -33,7 +33,7 @@ void user_create(user **usr, char *name, int socket_ID) {
     }
 	strcpy((*usr) -> name, name);
 	(*usr) -> socket = socket_ID;
-	(*usr) -> health = 100;
+	(*usr) -> connected = 1;
 	return;
 }
 
@@ -64,7 +64,7 @@ void user_remove(users **usrs, lobby **thelobby, int socket_ID, logger **log) {
 	int count = (*usrs) -> user_count;
 	int socket;	
 	char *name = user_get_user_by_socket_ID(*usrs, socket_ID)->name;
-
+	
 	for (i = 0; i < count; i++) {
 		socket = (*usrs) -> users[i] -> socket;
 		if (socket == socket_ID) {
@@ -76,7 +76,8 @@ void user_remove(users **usrs, lobby **thelobby, int socket_ID, logger **log) {
 			}
 			(*usrs) -> users[((*usrs) -> user_count)] = NULL;	
 			(*usrs) -> users = realloc((*usrs) -> users, (*usrs) -> user_count * sizeof(user));  
-		    //send_message(socket_ID, "logo-ack\n", log);                   
+		    if(user_get_connected(*usrs, socket))
+				send_message(socket_ID, "logo-ack\n", log);                   
             printf("User %s logged out\n", name);
 			printf("Actually logged users: %d\n", (*usrs) -> user_count);	
 			return;
@@ -84,7 +85,8 @@ void user_remove(users **usrs, lobby **thelobby, int socket_ID, logger **log) {
 	}    
     printf("Failed to log out user [%d]\n", socket_ID);
     printf("Sent message: logo-nack\n");
-	//send_message(socket_ID, "logo-nack\n", log);
+	if(user_get_connected(*usrs, socket))
+		send_message(socket_ID, "logo-nack\n", log);
 	return;
 }
 
@@ -120,6 +122,24 @@ void print_all_users(users *usrs){
 
 	printf("\nprinting all users:\n");
 	for(i = 0; i < count; i++){
-		printf("[%d] name:%s health:%d socket:%d\n", i, usrs->users[i]->name, usrs->users[i]->health, usrs->users[i]->socket);
+		printf("[%d] name:%s connected:%d socket:%d\n", i, usrs->users[i]->name, usrs->users[i]->connected, usrs->users[i]->socket);
 	}
+}
+
+void user_set_connected(users **usrs, int socket, int connected){
+	user *temp = NULL;
+	temp = user_get_user_by_socket_ID(*usrs, socket);
+	if(temp != NULL){
+		temp->connected = connected;		
+	}
+}
+
+int user_get_connected(users *usrs, int socket){
+	user *temp = NULL;
+	temp = user_get_user_by_socket_ID(usrs, socket);
+	if(temp != NULL){
+		return temp->connected;		
+	}
+
+	return 0;
 }

@@ -1,12 +1,9 @@
 
 import javafx.scene.control.Alert;
-
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.*;
 import java.util.List;
-
-//import javafx.application.Platform;
 
 public class Connection {
 
@@ -161,19 +158,6 @@ public class Connection {
 		return msg;
 	}
 
-	public void sendTestMsg(String msg){
-		try {
-			msgOut.write(msg.getBytes());
-			msgOut.flush();
-		} catch (IOException e) {
-			System.out.println("Failed to send test message.");
-			alert.setHeaderText("Failed to send test message.");
-			alert.setContentText("");
-			alert.show();
-			e.printStackTrace();
-		}
-	}
-
 	public void login(String name) {System.out.println(name);
 		String msg = genMsg(name, 1);
 		mainWindow.client.setUserName(name);
@@ -212,19 +196,10 @@ public class Connection {
 			alert.show();
 		}
 	}
-/*
-	public void getHealt(){
-		String msg = genMsg("", 4);
-		try {
-			msgOut.write(msg.getBytes());
-		} catch (IOException e) {
-			System.out.println("Failed to send create room message.");
-		}
-	}
-*/
+
 	public void sendDMG(int dmg) {
 		System.out.println("dmg:"+dmg);
-		String msg = genMsg(""+dmg, 5);
+		String msg = genMsg(""+dmg, 4);
 		try {
 			msgOut.write(msg.getBytes());
 		} catch (IOException e) {
@@ -235,6 +210,28 @@ public class Connection {
 		}
 	}
 
+	public void gameReconResponse() {
+		String msg = genMsg("", 10);
+		try {
+			msgOut.write(msg.getBytes());
+		} catch (IOException e) {
+			System.out.println("Failed to send game reconnected response message.");
+			alert.setHeaderText("Failed to send game reconnected response message.");
+			alert.setContentText("");
+			alert.show();
+		}
+	}
+	public void gameStartedResponse() {
+		String msg = genMsg("", 11);
+		try {
+			msgOut.write(msg.getBytes());
+		} catch (IOException e) {
+			System.out.println("Failed to send game started response message.");
+			alert.setHeaderText("Failed to send game started response message.");
+			alert.setContentText("");
+			alert.show();
+		}
+	}
 
 	public Socket getSocket() {
 		return socket;

@@ -4,13 +4,11 @@
     <list default="true" id="4413b61f-fe87-44d8-8a26-833da2615950" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Connection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Connection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Constants.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MainWindow.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/MessageReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MessageReader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/UPSSemestral-1.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/UPSSemestral-1.0.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/UPSrun.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/UPSrun.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server_c/server.c" beforeDir="false" afterPath="$PROJECT_DIR$/../server_c/server.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server_c/usefc.c" beforeDir="false" afterPath="$PROJECT_DIR$/../server_c/usefc.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server_c/user.c" beforeDir="false" afterPath="$PROJECT_DIR$/../server_c/user.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +47,7 @@
     <property name="project.structure.last.edited" value="Global Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Console Colors" />
   </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -98,30 +97,30 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="1115" y="229" key="FileChooserDialogImpl/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1611100775727" />
-    <state width="1877" height="213" key="GridCell.Tab.0.bottom" timestamp="1611522067537">
+    <state width="1877" height="213" key="GridCell.Tab.0.bottom" timestamp="1611599649541">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="213" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1611522067537" />
+    <state width="1877" height="213" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1611599649541" />
     <state width="914" height="279" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1610732126237" />
-    <state width="1877" height="213" key="GridCell.Tab.0.center" timestamp="1611522067537">
+    <state width="1877" height="213" key="GridCell.Tab.0.center" timestamp="1611599649541">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="213" key="GridCell.Tab.0.center/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1611522067537" />
+    <state width="1877" height="213" key="GridCell.Tab.0.center/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1611599649541" />
     <state width="914" height="279" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1610732126237" />
-    <state width="1877" height="213" key="GridCell.Tab.0.left" timestamp="1611522067537">
+    <state width="1877" height="213" key="GridCell.Tab.0.left" timestamp="1611599649541">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="213" key="GridCell.Tab.0.left/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1611522067537" />
+    <state width="1877" height="213" key="GridCell.Tab.0.left/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1611599649541" />
     <state width="914" height="279" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1610732126236" />
-    <state width="1877" height="213" key="GridCell.Tab.0.right" timestamp="1611522067537">
+    <state width="1877" height="213" key="GridCell.Tab.0.right" timestamp="1611599649541">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="213" key="GridCell.Tab.0.right/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1611522067537" />
+    <state width="1877" height="213" key="GridCell.Tab.0.right/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1611599649541" />
     <state width="914" height="279" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1610732126237" />
-    <state x="880" y="94" key="SettingsEditor" timestamp="1610845426337">
+    <state x="880" y="94" key="SettingsEditor" timestamp="1611667778981">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="880" y="94" key="SettingsEditor/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1610845426337" />
+    <state x="880" y="94" key="SettingsEditor/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1611667778981" />
     <state x="656" y="252" width="639" height="536" key="find.popup" timestamp="1611098795951">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

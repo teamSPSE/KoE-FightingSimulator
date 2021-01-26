@@ -1,6 +1,6 @@
 
 import javafx.application.Platform;
-
+import javafx.scene.control.Alert;
 import java.io.*;
 import java.net.Socket;
 
@@ -13,7 +13,6 @@ public class MessageReader extends Thread {
 	DataOutputStream msgOut;
 	boolean flag = false;
 	String pingMsg = "00213";
-	String pingRespMsg = "00214";
 
 	public MessageReader(Connection con, Socket sock, DataOutputStream msgOut) {
 		this.sock = sock;
@@ -80,12 +79,11 @@ public class MessageReader extends Thread {
 			if(p[1].equals("ack")){
 				Platform.exit();
 				System.exit(0);
-			}
-		} else if (p[0].equals("ping")) {
-			try {
-				msgOut.write(pingRespMsg.getBytes());
-			} catch (IOException e) {
-				System.out.println("Cannot send ping response.");
+			}else{
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+				alert.setHeaderText("Logout failed");
+				alert.setContentText("Something went wrong. Try it again.");
+				alert.show();
 			}
 		} else if (p[0].equals("game")) {
 			Platform.runLater(() -> {
@@ -95,9 +93,7 @@ public class MessageReader extends Thread {
 					e.printStackTrace();
 				}
 			});
-		}/* else if (p[0].equals("health")) {
-			Platform.runLater(() -> con.mainWindow.sethealth(msg));
-		}*/ else if (p[0].equals("lobby")) {
+		} else if (p[0].equals("lobby")) {
 			if(p[1].equals("ack"))
 				System.out.println("Succesfully joined lobby.");
 		} else if (p[0].equals("alive")) {

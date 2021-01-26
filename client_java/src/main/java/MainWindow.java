@@ -9,10 +9,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -38,15 +36,10 @@ public class MainWindow {
 
 	//images
 	private static Image arena_background = null;
-	private static Image galdiator_attack_left = null;
-	private static Image galdiator_attack_right = null;
-	private static Image galdiator_chill_left = null;
-	private static Image galdiator_chill_right = null;
 
 	//game
 	public int enemyHealth = 100;
 	public static Random r = new Random();
-	public boolean healthUpdated = false;
 
 	public MainWindow(Stage stage, List<String> args){
 		this.conn = new Connection(args, this);
@@ -209,7 +202,6 @@ public class MainWindow {
 	public void processGame(String msg) throws InterruptedException {
 		String[] p = msg.split("-");
 		Alert alert = new Alert(Alert.AlertType.ERROR);
-		//conn.getHealt();
 
 		if (p[1].equals("started")){
 			if(p[2].equals("1")){
@@ -218,6 +210,7 @@ public class MainWindow {
 				client.setState(States.OPPONENT_PLAYING);
 			}
 			primaryStage = createArena(primaryStage);
+			conn.gameStartedResponse();
 			return;
 		}else if(p[1].equals("update")){
 			client.sethealth(Integer.parseInt(p[2]));
@@ -261,7 +254,13 @@ public class MainWindow {
 		} else if(p[1].equals("reconnected")){
 			client.sethealth(Integer.parseInt(p[2]));
 			enemyHealth = Integer.parseInt(p[3]);
+			if(Integer.parseInt(p[4])==1){
+				client.setState(States.YOU_PLAYING);
+			}else{
+				client.setState(States.OPPONENT_PLAYING);
+			}
 			primaryStage = createArena(primaryStage);
+			conn.gameReconResponse();
 		} else {
 			alert.setHeaderText("Game failed!");
 			alert.setContentText("Something went wrong");
@@ -274,15 +273,6 @@ public class MainWindow {
 			try {
 				FileInputStream stream = new FileInputStream("img/arena_background.png");
 				arena_background = new Image(stream);
-				/*stream = new FileInputStream("img/gladiator_attack.png");
-				galdiator_attack_left = new Image(stream);
-				stream = new FileInputStream("img/gladiator_chill.png");
-				galdiator_chill_left = new Image(stream);
-				stream = new FileInputStream("img/gladiator_attack_right.png");
-				galdiator_attack_right = new Image(stream);
-				stream = new FileInputStream("img/gladiator_chill_right.png");
-				galdiator_chill_right = new Image(stream);*/
-
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -302,17 +292,20 @@ public class MainWindow {
 
 		Label playerHealth = new Label("Your HP: " + client.health);
 		Label oponentHealth = new Label("Enemy HP: " + enemyHealth);
+		Button instakill = new Button("instakill");
 		Button fastAttack = new Button("fast attack");
 		Button normalAttack = new Button("normall attack");
 		Button hardAttack = new Button("hard attack");
 
 		if (client.getState() == States.YOU_PLAYING) {
 			currentPlayer = Constants.playerYou;
+			instakill.setDisable(false);
 			fastAttack.setDisable(false);
 			normalAttack.setDisable(false);
 			hardAttack.setDisable(false);
 		} else {
 			currentPlayer = Constants.playerOpponent;
+			instakill.setDisable(true);
 			fastAttack.setDisable(true);
 			normalAttack.setDisable(true);
 			hardAttack.setDisable(true);
@@ -326,6 +319,7 @@ public class MainWindow {
 		info.add(fastAttack, 1, 10);
 		info.add(normalAttack, 1, 11);
 		info.add(hardAttack, 1, 12);
+		info.add(instakill, 1, 13);
 
 		fastAttack.setOnAction(event -> {
 			countAttack(1);
@@ -336,23 +330,14 @@ public class MainWindow {
 		hardAttack.setOnAction(event -> {
 			countAttack(3);
 		});
-
-		/*
-		ImageView imageView_gladiator_left = new ImageView(galdiator_chill_left);
-		ImageView imageView_gladiator_right = new ImageView(galdiator_chill_right);
-*
-		HBox arena = new HBox(200);
-		arena.getChildren().add(imageView_gladiator_left);
-		arena.getChildren().add(imageView_gladiator_right);
-		Background background = new Background(new BackgroundImage(arena_background, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT));
-		arena.setBackground(background);
-		*/
+		instakill.setOnAction(event -> {
+			countAttack(4);
+		});
 
 		ImageView ImageView_arena_background = new ImageView(arena_background);
 
 		BorderPane root = new BorderPane();
 		root.setCenter(info);
-		//root.setLeft(arena);
 		root.setLeft(ImageView_arena_background);
 
 		Scene scene = new Scene(root, Constants.stageWidthArena, Constants.stageHeightArena);
@@ -366,21 +351,12 @@ public class MainWindow {
 		int dmg = 0;
 		int chance = r.nextInt(10);
 		switch (i){
-			case 1: dmg = 100;break;//(chance <= 7 ? 20 : 0);break;
-			case 2: dmg = (chance <= 5 ? 40 : 0);break;
+			case 1: dmg = (chance <= 7 ? 10 : 0);break;
+			case 2: dmg = (chance <= 5 ? 30 : 0);break;
 			case 3: dmg = (chance <= 2 ? 50 : 0);break;
+			case 4: dmg = 100;break;
 			default: dmg=0;
 		}
 		conn.sendDMG(dmg);
 	}
-/*
-	public void sethealth(String msg) {
-		healthUpdated = true;
-		String[] p = msg.split("-");
-		if(p[0].equals("health")){
-			client.sethealth(Integer.parseInt(p[1]));
-			enemyHealth = Integer.parseInt((p[2]));
-			System.out.println("here");
-		}
-	}*/
 }

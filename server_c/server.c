@@ -40,6 +40,7 @@ void print_all_vars(){
 void login(int socket, char *name) {
     int i;
     game *tmp_game;
+
     if (theusers -> user_count == MAX_USERS) {
         printf("Couldn't login user: %s. Maximum of logged in players reached.\n", name);
         printf("Sent message: logi-nackfull\n");
@@ -59,9 +60,25 @@ void login(int socket, char *name) {
 	send_message(socket, "logi-ack\n", &thelogger);
 
     tmp_game = find_game_by_name(thegames, name);
-    if(tmp_game != NULL){
-        printf("user %s is in a game (%d)!\n", name, tmp_game->game_ID);
-        send_message(socket, "game-reconnected-10-10\n", &thelogger);   //game-reconnected-myhealth-enemyhealth
+    if(tmp_game != NULL){            
+        int *my_user_health;
+        int *second_user_health;
+        int now_playing_id;
+        char message_reconn[20];
+
+        if(strcmp(tmp_game->name_1, name)==0){
+            second_user_health = &(tmp_game -> health_2);
+            my_user_health = &(tmp_game -> health_1);
+        }else{
+            second_user_health = &(tmp_game -> health_1);
+            my_user_health = &(tmp_game -> health_2);
+        }
+
+        now_playing_id = strcmp(tmp_game->now_playing_name, name)==0 ? 1 : 0;
+
+        printf("user %s is in a game(%d)!\n", name, tmp_game->game_ID);
+        sprintf(message_reconn, "game-reconnected-%d-%d-%d\n", *my_user_health, *second_user_health, now_playing_id);         //game-reconnected-myhealth-enemyhealth-nowplaying(0/1)
+        send_message(socket, &message_reconn[0], &thelogger);   
     }
 }
 
@@ -70,16 +87,17 @@ void logout(int socket) {
     if(user_get_user_by_socket_ID(theusers, socket) != NULL){
         print_all_vars();
         user_remove(&theusers, &thelobby, socket, &thelogger);
-        //send_message(socket, "logo-ack\n", &thelogger);
     }
 }
 
 
-void want_play(int socket) {
+void join_lobby(int socket) {
 	user *my_user = NULL;
 	user *second_user = NULL;
 	lobby_add_player(&thelobby, socket);
-    send_message(socket, "lobby-ack\n", &thelogger);
+    
+    if(user_get_connected(theusers, socket))
+        send_message(socket, "lobby-ack\n", &thelogger);
 
 	if (thelobby -> size >= 2) {
 		int socket_ID_1 = socket;
@@ -96,41 +114,17 @@ void want_play(int socket) {
 		second_user = user_get_user_by_socket_ID(theusers, socket_ID_2);
 
         printf("socket_ID_1:%d | socket_ID_2:%d\n",socket_ID_1,socket_ID_2);
-		game_add(&thegames, my_user -> name, second_user -> name);
+		game_add(&thegames, my_user -> name, second_user -> name, my_user -> name);
 		
-		send_message(socket_ID_1, "game-started-1\n", &thelogger);
-		send_message(socket_ID_2, "game-started-0\n", &thelogger);
+        if(my_user->connected)
+		    send_message(socket_ID_1, "game-started-1\n", &thelogger);
+
+        if(second_user->connected)            
+		    send_message(socket_ID_2, "game-started-0\n", &thelogger);
         
 	}
 	return;
 }
-/*
-void send_users_health(users *theusers, int socket, logger **thelogger, games *thegames){
-    user *my_user = NULL;
-    user *second_user = NULL;
-    game *thegame = NULL;
-    int my_user_health;
-    int second_user_health;
-    
-	my_user = user_get_user_by_socket_ID(theusers, socket);
-    thegame = find_game_by_name(thegames, my_user->name);    
-    
-    if(strcmp(thegame->name_1, my_user->name)==0){
-        second_user = user_get_user_by_name(theusers, thegame->name_2);
-    }else{
-        second_user = user_get_user_by_name(theusers, thegame->name_1);
-    }
-    if(!my_user || !second_user){
-        printf("cant find user in send_user_health.\n");
-        return;
-    }
-    my_user_health = my_user->health;
-    second_user_health = second_user->health;
-
-    char message[20];
-    sprintf(message, "health-%d-%d\n", my_user_health, second_user_health);
-    send_message(socket, &message[0], thelogger);
-}*/
 
 void processDMG(int socket, char *msg){
     int dmg = atoi(msg+2);
@@ -140,47 +134,56 @@ void processDMG(int socket, char *msg){
     game *thegame = NULL;
     char message_1[20];
     char message_2[20];
+    int *my_user_health;
+    int *second_user_health;
     
 	my_user = user_get_user_by_socket_ID(theusers, socket);
     thegame = find_game_by_name(thegames, my_user->name);    
     
     if(strcmp(thegame->name_1, my_user->name)==0){
         second_user = user_get_user_by_name(theusers, thegame->name_2);
+        second_user_health = &(thegame -> health_2);
+        my_user_health = &(thegame -> health_1);
     }else{
         second_user = user_get_user_by_name(theusers, thegame->name_1);
+        second_user_health = &(thegame -> health_1);
+        my_user_health = &(thegame -> health_2);
     }
+
     if(!my_user || !second_user){
         printf("cant find user in processDMG.\n");
         if(my_user == NULL && second_user != NULL){
             printf("user with socket %d is disconnected, wait for him\n", socket);
-            send_message(second_user->socket, "game-userdsc\n", &thelogger);
+            if(second_user->connected)
+                send_message(second_user->socket, "game-userdsc\n", &thelogger);
         }
         if(my_user != NULL && second_user == NULL){
             printf("second user is disconnected, wait for him\n");
-            send_message(my_user->socket, "game-userdsc\n", &thelogger);
-        }
-        if(!my_user && !second_user){
-            printf("both players are disconnected -> game will be removed\n");
-            game_remove(&thegames, thegame->game_ID);
+            if(my_user->connected)
+                send_message(my_user->socket, "game-userdsc\n", &thelogger);
         }
         return;
     }
-    second_user->health = second_user->health - dmg;
 
-    if(second_user->health > 0){
-        sprintf(message_1, "game-update-%d-%d\n", my_user->health, second_user->health);
-        send_message(my_user->socket, &message_1[0], &thelogger);
+    *second_user_health = *second_user_health - dmg;
+    thegame->now_playing_name = second_user->name;
 
-        sprintf(message_2, "game-update-%d-%d\n", second_user->health, my_user->health);
-        send_message(second_user->socket, &message_2[0], &thelogger);
+    if(*second_user_health > 0){
+        sprintf(message_1, "game-update-%d-%d\n", *my_user_health, *second_user_health);
+        if(my_user->connected)
+            send_message(my_user->socket, &message_1[0], &thelogger);
+
+        sprintf(message_2, "game-update-%d-%d\n", *second_user_health, *my_user_health);
+        if(second_user->connected)
+            send_message(second_user->socket, &message_2[0], &thelogger);
     }else{
         printf("game finished\n");
         game_remove(&thegames, thegame->game_ID);
-        my_user->health = 100;
-        second_user->health = 100;
-
-        send_message(my_user->socket, "game-finish-1\n", &thelogger);        //winner
-        send_message(second_user->socket, "game-finish-0\n", &thelogger);    //looser
+        
+        if(my_user->connected)
+            send_message(my_user->socket, "game-finish-1\n", &thelogger);        //winner
+        if(second_user->connected)
+            send_message(second_user->socket, "game-finish-0\n", &thelogger);    //looser
     }
 }
 
@@ -208,30 +211,32 @@ int parse_msg(int socket, char *msg) {
         case 3:
             pthread_rwlock_rdlock(&lock);         
             printf("Received joinLobby request: %s\n", msg);
-            want_play(socket);   
+            join_lobby(socket);   
             pthread_rwlock_unlock(&lock);
             return 3;
-        /*case 4:
-            pthread_rwlock_rdlock(&lock);         
-            printf("Received send_users_health request: %s\n", msg);
-            send_users_health(theusers, socket, &thelogger, thegames);   
-            pthread_rwlock_unlock(&lock);
-            return 4;*/
-        case 5:
+        case 4:
             pthread_rwlock_rdlock(&lock);         
             printf("Received processDMG request: %s\n", msg);
             processDMG(socket, msg);   
             pthread_rwlock_unlock(&lock);
-            return 5;
+            return 4;
+        case 10:
+            pthread_rwlock_rdlock(&lock);         
+            printf("Received game reconnected response.\n"); 
+            pthread_rwlock_unlock(&lock);
+            return 10;
+        case 11:
+            pthread_rwlock_rdlock(&lock);         
+            printf("Received game started response.\n");
+            pthread_rwlock_unlock(&lock);
+            return 11;
         case 13:
             pthread_rwlock_rdlock(&lock);
             //printf("Received ping message, sending response.\n");
-            //send(socket, "alive\n", 6, 0);
+            if(user_get_connected(theusers, socket))
+                send_message(socket, "alive\n", &thelogger);
             pthread_rwlock_unlock(&lock);
-            return 13;            
-        case 14:
-           // printf("Received ping response from socket: %d\n", socket);
-            return 14;
+            return 13;   
         default:
             printf("%s\n", msg);
             return 0;
@@ -242,37 +247,12 @@ void *connection_handler(void *arg) {
     int client_sock, val, size_rec, res;
     char msg[200], msg_size[3];
     client_sock = *(int *) arg;
-    int missed_ping = 0;
-
-	
 
     while (1) {
         memset(msg, '\0', sizeof(msg));
         memset(msg_size, '\0', sizeof(msg_size));
         val = recv(client_sock, msg_size, 3, 0);
-/*
-        while (val < 0 && missed_ping < 12) {
 
-            if (missed_ping == 1) {
-                printf("Sending lost con notify.\n");
-            }
-			send_message(client_sock, "ping\n", &thelogger);
-            printf("Timeout. Sending ping to socket: %d\n", client_sock);
-            val = recv(client_sock, msg_size, 3, 0);
-
-            missed_ping++;
-        }
-
-        if (missed_ping == 12) {
-            printf("Closing connection. Socket: %d\n", client_sock);
-            logout(client_sock);
-            close(client_sock);
-            free(arg);
-            return 0;
-        }
-
-        missed_ping = 0;
-*/
         size_rec = strtol(msg_size, NULL, 10);
 
         if (size_rec > 0) {
@@ -282,18 +262,20 @@ void *connection_handler(void *arg) {
         if (val < 0) {
             continue;
         }
-		
-        res = parse_msg(client_sock, msg);
-
-        if (res == 2) {
+        
+        if(val == 0) {
+            printf("Connection closed.\n");
+            user_set_connected(&theusers, client_sock, 0);
+            logout(client_sock);
             close(client_sock);
             free(arg);
             break;
         }
+		
+        res = parse_msg(client_sock, msg);
 
-        if(val == 0) {
-            printf("Connection closed.\n");
-            logout(client_sock);
+        if (res == 2) {
+            user_set_connected(&theusers, client_sock, 0);
             close(client_sock);
             free(arg);
             break;
@@ -301,12 +283,14 @@ void *connection_handler(void *arg) {
 
         if (res == 0) {
             printf("Message not recognized\n");
+            user_set_connected(&theusers, client_sock, 0);
             logout(client_sock);
             close(client_sock);
             free(arg);
             break;
         }
     }
+    
     printf("Bytes in:%d\n", thelogger -> bytes_in);
     printf("Bytes out:%d\n", thelogger -> bytes_out);
     return 0;

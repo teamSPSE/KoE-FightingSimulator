@@ -21,10 +21,13 @@ void games_create(games **all_games) {
  * @param name_2 - name of player 2
  * @param now_playing - name of player who is on turn
  */
-void game_create(game **all_games, char *name_1, char *name_2) {
-	(*all_games) = calloc(1, sizeof(game));
-	(*all_games) -> name_1 = name_1;
-	(*all_games) -> name_2 = name_2;
+void game_create(game **thegame, char *name_1, char *name_2, char *now_playing_name) {
+	(*thegame) = calloc(1, sizeof(game));
+	(*thegame) -> name_1 = name_1;
+	(*thegame) -> name_2 = name_2;
+	(*thegame) -> now_playing_name = now_playing_name;
+	(*thegame) -> health_1 = 100;
+	(*thegame) -> health_2 = 100;
 }
 
 /*
@@ -34,12 +37,12 @@ void game_create(game **all_games, char *name_1, char *name_2) {
  * @param name_2 - name of player 2
  * @param now_playing - name of player who is on turn
  */
-void game_add(games **all_games, char *name_1, char *name_2) {
+void game_add(games **all_games, char *name_1, char *name_2, char *now_playing_name) {
 	(*all_games) -> games_count++;
 	//printf("Games count: %d\n", (*all_games) -> games_count);
 	(*all_games) -> games = realloc((*all_games) -> games, (*all_games) -> games_count * sizeof(game));
 	game *game = NULL;
-	game_create(&game, name_1, name_2);
+	game_create(&game, name_1, name_2, now_playing_name);
 	(*all_games) -> games[((*all_games) -> games_count) - 1] = game;
 	(*all_games) -> games[((*all_games) -> games_count) - 1] -> game_ID = ((*all_games) -> games_count) - 1;
 }
