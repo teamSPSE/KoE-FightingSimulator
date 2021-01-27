@@ -314,8 +314,10 @@ void *connection_handler(void *arg) {
             break;
         }
 		
-        res = parse_msg(client_sock, msg);
-
+        if(strlen(msg)>1){
+            res = parse_msg(client_sock, msg);
+        }
+        
         if (res == 2) {
             user_set_connected(&theusers, client_sock, 0);
             close(client_sock);

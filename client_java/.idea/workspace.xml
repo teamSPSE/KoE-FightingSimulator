@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4413b61f-fe87-44d8-8a26-833da2615950" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Connection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Connection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/UPSSemestral-1.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/UPSSemestral-1.0.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/UPSrun.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/UPSrun.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Connection.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Connection.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/MainWindow.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/MainWindow.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/MessageReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/MessageReader.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../~$kumentace.docx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../~WRL2376.tmp" beforeDir="false" />
-    </list>
+    <list default="true" id="4413b61f-fe87-44d8-8a26-833da2615950" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
