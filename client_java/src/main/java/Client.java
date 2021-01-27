@@ -1,11 +1,18 @@
-
+/**
+ * trida klienta
+ */
 public class Client {
-
+    /**
+     * nickname
+     */
     private String userName = "";
-    private Color color = null;
+    /**
+     * stav klienta
+     */
     private States state = States.LOGGING;
-    private boolean checkingConnected = false;
-    private boolean connected = true;
+    /**
+     * zdravi uzivatele
+     */
     public int health = 100;
 
     public Client(String userName) {
@@ -18,36 +25,12 @@ public class Client {
         this.userName = userName;
     }
 
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
     public States getState() {
         return state;
     }
 
     public void setState(States state) {
         this.state = state;
-    }
-
-    public boolean isCheckingConnected() {
-        return checkingConnected;
-    }
-
-    public void setCheckingConnected(boolean connected) {
-        this.checkingConnected = connected;
-    }
-
-    public boolean isConnected() {
-        return connected;
-    }
-
-    public void setConnected(boolean connected) {
-        this.connected = connected;
     }
 
     public void sethealth(int s) {

@@ -1,4 +1,4 @@
 all: client
 
 client:
-	ant build
+	build.bat

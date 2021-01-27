@@ -5,16 +5,45 @@ import java.io.IOException;
 import java.net.*;
 import java.util.List;
 
+/**
+ * trida starajici se o spojeni mezi serverem a klientem
+ * trida obsahuje metody pro odeslani zprav na server
+ */
 public class Connection {
-
+	/**
+	 * instance hlavniho okna
+	 */
 	public MainWindow mainWindow = null;
+	/**
+	 * instance socketu pro spojeni na server
+	 */
 	private Socket socket = null;
+	/**
+	 * pomoci tohoto streamu se pocilaji data na server
+	 */
 	private DataOutputStream msgOut = null;
+	/**
+	 * listener zprav ze serveru
+	 */
 	private MessageReader mr = null;
-	private String addr = "192.168.50.3";
-	private int port = 10000;
+	/**
+	 * adresa serveru deklarovana na defaultni hodnotu 192.168.50.3
+	 */
+	public String addr = "192.168.50.3";
+	/**
+	 * port na kterem server posloucha deklarovany na defaultni hodnotu 10000
+	 */
+	public int port = 10000;
+	/**
+	 * slouzi pro vypis chyb v GUI
+	 */
 	public Alert alert = new Alert(Alert.AlertType.ERROR);
 
+	/**
+	 * konstruktor tridy Connection
+	 * @param args argumenty z cmd
+	 * @param mainWindow instance hlavniho okna
+	 */
 	public Connection(List<String> args, MainWindow mainWindow) {
 		switch(args.size()) {
 			case 4:
@@ -55,6 +84,11 @@ public class Connection {
 		}
 	}
 
+	/**
+	 * zkontroluje validitu predane IP ve formatu a.b.c.d
+	 * @param ip IP ve formatu a.b.c.d
+	 * @return	true -> ip je validni
+	 */
 	public static final boolean checkIPv4(final String ip) {
 		boolean isIPv4;
 		try {
@@ -67,6 +101,12 @@ public class Connection {
 		return isIPv4;
 	}
 
+	/**
+	 * pripoji se na server
+	 * @param addr adresa serveru
+	 * @param port port serveru
+	 * @return true pokud se pripojil spravne
+	 */
 	public boolean connect(String addr, int port) {
 
 		try {
@@ -109,35 +149,12 @@ public class Connection {
 		return true;
 	}
 
-	public Socket reconnect() {
-			try {
-				socket = new Socket(addr, port);
-			} catch (UnknownHostException e2) {
-				System.out.println("error");
-				return null;
-				
-			} catch (IOException e2) {
-				return null;
-			}
-			if (socket == null) {
-				return null;
-			}
-			try {
-				socket.setSoTimeout(3 * 1000);
-			} catch (SocketException e1) {
-				return null;
-			}
-		try {
-			msgOut = new DataOutputStream(socket.getOutputStream());
-		} catch (IOException e) {
-			System.out.println("Failed to open output stream. Aplication will quit.");
-	//		LOGGER.log(Level.INFO, "Failed to open output stream. Aplication will quit.");
-			//Platform.exit();
-			System.exit(1);
-		}
-		return socket;
-	}
-
+	/**
+	 * generuje zpravu
+	 * @param val zprava
+	 * @param t id zpravy
+	 * @return retezec, ktery se posle na server
+	 */
 	public String genMsg(String val, int t) {
 		int l = val.length() + 2;
 		String s;
@@ -158,6 +175,10 @@ public class Connection {
 		return msg;
 	}
 
+	/**
+	 * prihlaseni uzivatele, posle pozadavek na server o prihlaseni
+	 * @param name jmeno uzivatele
+	 */
 	public void login(String name) {System.out.println(name);
 		String msg = genMsg(name, 1);
 		mainWindow.client.setUserName(name);
@@ -172,6 +193,9 @@ public class Connection {
 		}
 	}
 
+	/**
+	 * odhlaseni uzivatele, posle pozadavek na server o odhlaseni
+	 */
 	public void logout() {
 		String msg = genMsg("", 2);
 		try {
@@ -184,6 +208,9 @@ public class Connection {
 		}
 	}
 
+	/**
+	 * pridani uzivatele do lobby, posle pozadavek na server o pridani uzivatele do lobby
+	 */
 	public void joinLobby() {
 		String msg = genMsg("", 3);
 		//mainWindow.client.setState(States.IN_LOBBY);
@@ -197,6 +224,10 @@ public class Connection {
 		}
 	}
 
+	/**
+	 * posle na server pozadavek na odecteni souperovo zdravi o parametr dmg
+	 * @param dmg poskozeni
+	 */
 	public void sendDMG(int dmg) {
 		System.out.println("dmg:"+dmg);
 		String msg = genMsg(""+dmg, 4);
@@ -210,6 +241,9 @@ public class Connection {
 		}
 	}
 
+	/**
+	 * posle na server odpoved, ze uspesne probehlo opetovne pripojeni
+	 */
 	public void gameReconResponse() {
 		String msg = genMsg("", 10);
 		try {
@@ -221,6 +255,10 @@ public class Connection {
 			alert.show();
 		}
 	}
+
+	/**
+	 * posle na server odpoved, ze se uspesne zapnula hra
+	 */
 	public void gameStartedResponse() {
 		String msg = genMsg("", 11);
 		try {

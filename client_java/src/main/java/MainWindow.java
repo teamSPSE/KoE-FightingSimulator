@@ -15,6 +15,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+
+/**
+ * hlavni trida aplikace
+ */
 public class MainWindow {
 	private Connection conn;
 	private Stage primaryStage = null;
@@ -43,19 +47,24 @@ public class MainWindow {
 
 	public MainWindow(Stage stage, List<String> args){
 		this.conn = new Connection(args, this);
-		String host = "192.168.50.3";
-		int port = 10000;
-		connected = this.conn.connect(host, port);
+		connected = this.conn.connect(this.conn.addr, this.conn.port);
 		this.primaryStage = createLoginStage(stage);
 		this.client = new Client("");
 	}
 
-
+	/**
+	 * zobrazi okno
+	 */
 	public void show() {
 		if(connected)
 			this.primaryStage.show();
 	}
 
+	/**
+	 * vytvori stage pro prihlaseni
+	 * @param stage	aktualni stage
+	 * @return	login stage
+	 */
 	public Stage createLoginStage(Stage stage) {
 		stage = onCloseEvent(stage);
 		nameOfGame.setFont(new Font(20));
@@ -96,11 +105,15 @@ public class MainWindow {
 		return stage;
 	}
 
+	/**
+	 * vyhodnoti odpoved serveru na pozadavek loginu
+	 * @param msg	odpoved servetu na login
+	 */
 	public void processLogin(String msg) {
 		String[] p = msg.split("-");
 		Alert alert = null;
 
-		if (p[1].equals("ack")) {
+		if (p[1].equals("ack")) {		//ok
 			primaryStage = createLobbyStage(primaryStage);
 			alert = new Alert(Alert.AlertType.INFORMATION);
 			alert.setHeaderText("Login was successful");
@@ -108,17 +121,17 @@ public class MainWindow {
 			alert.setResizable(true);
 			alert.show();
 			return;
-		}else if(p[1].equals("nackfull")){
+		}else if(p[1].equals("nackfull")){	//plno hracu
 			alert = new Alert(Alert.AlertType.ERROR);
 			alert.setHeaderText("Login failed");
 			alert.setContentText("List of users is full.");
 			alert.show();
-		}else if(p[1].equals("nackname")){
+		}else if(p[1].equals("nackname")){	//zabrane jmeno
 			alert = new Alert(Alert.AlertType.ERROR);
 			alert.setHeaderText("Login failed");
 			alert.setContentText("List of users is full.");
 			alert.show();
-		}else{
+		}else{								//jina chyba
 			alert = new Alert(Alert.AlertType.ERROR);
 			alert.setHeaderText("Login failed");
 			alert.setContentText("Something went wrong");
@@ -126,14 +139,20 @@ public class MainWindow {
 		}
 	}
 
+	/**
+	 * vytvori stage pro pridani do lobby
+	 * @param stage	aktualni stage
+	 * @return	lobby stage
+	 */
 	public Stage createLobbyStage(Stage stage) {
 		stage = onCloseEvent(stage);
 		play.setMaxWidth(75);
 		nameOfGame.setFont(new Font(20));
 		nameOfPlayer.setFont(new Font(20));
 		nameOfPlayer.setText(client.getUserName());
-		nameOfPlayer.setTextFill(javafx.scene.paint.Color.web(Color.Blue.getHexColor()));
+		nameOfPlayer.setTextFill(javafx.scene.paint.Color.web("#4c02f9"));
 
+		//uzivatel klikl na play
 		if (play_processed) {
 			play.setDisable(true);
 			play.setText("Queued");
@@ -165,6 +184,9 @@ public class MainWindow {
 		return stage;
 	}
 
+	/**
+	 * nastavi potrebne atributy a zavola funkci joinLobby, ktera odesle pozadavek na pridani hrace do lobby
+	 */
 	public void play() {
 		conn.joinLobby();
 		this.play_processed = true;
@@ -173,6 +195,11 @@ public class MainWindow {
 		play.setText("Queued");
 	}
 
+	/**
+	 * instrukce, ktere se maji provest po zavreni aplikace
+	 * @param stage	 aktialni stage
+	 * @return	zavrena stage
+	 */
 	public Stage onCloseEvent(Stage stage) {
 		stage.setOnCloseRequest(event -> {
 			Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -199,20 +226,24 @@ public class MainWindow {
 		return stage;
 	}
 
-	public void processGame(String msg) throws InterruptedException {
+	/**
+	 * spravuje hru
+	 * @param msg zprava ze serveru
+	 */
+	public void processGame(String msg) {
 		String[] p = msg.split("-");
 		Alert alert = new Alert(Alert.AlertType.ERROR);
 
-		if (p[1].equals("started")){
-			if(p[2].equals("1")){
+		if (p[1].equals("started")){							//hra zacala
+			if(p[2].equals("1")){									//zacina hrac
 				client.setState(States.YOU_PLAYING);
-			}else if(p[2].equals("0")){
+			}else if(p[2].equals("0")){								//zacina oponent
 				client.setState(States.OPPONENT_PLAYING);
 			}
-			primaryStage = createArena(primaryStage);
-			conn.gameStartedResponse();
+			primaryStage = createArena(primaryStage);				//vytovri stage areny
+			conn.gameStartedResponse();								//odesle odpoved, ze byla hra zapnuta
 			return;
-		}else if(p[1].equals("update")){
+		}else if(p[1].equals("update")){							//hra se vyvinula, jeden z hracu odehral svuj tah
 			client.sethealth(Integer.parseInt(p[2]));
 			enemyHealth = Integer.parseInt(p[3]);
 
@@ -224,16 +255,16 @@ public class MainWindow {
 
 			primaryStage = createArena(primaryStage);
 			return;
-		}else if(p[1].equals("finish")){
+		}else if(p[1].equals("finish")){								// hra skoncila
 			Alert finish = new Alert(Alert.AlertType.CONFIRMATION);
 			finish.setHeaderText("Game finished!");
-			if(p[2].equals("1"))
+			if(p[2].equals("1"))										//vyherce
 				finish.setContentText("You are the WINNER!!!\nDo you want to play another match?");
-			else if(p[2].equals("0"))
+			else if(p[2].equals("0"))									//porazeny
 				finish.setContentText("You have lost :(\nDo you want to play another match?");
-			else
+			else														//chyba
 				finish.setContentText("Something went wrong! We have no winner!\nDo you want to play another match?");
-
+		//rozhodnoti uzivatele, zda chce hrat dal
 			Optional<ButtonType> result = finish.showAndWait();
 			if (result.get() == ButtonType.OK){
 				play_processed = false;
@@ -247,11 +278,11 @@ public class MainWindow {
 			}
 
 			return;
-		} else if(p[1].equals("userdsc")){
+		} else if(p[1].equals("userdsc")){							//opponent se odpojil
 			alert.setHeaderText("Opponent is disconnected!");
 			alert.setContentText("We could not send your dmg because opponenct is disconnected. Try again in a moment.");
 			alert.show();
-		} else if(p[1].equals("reconnected")){
+		} else if(p[1].equals("reconnected")){						//pripojeni uzivatele zpet do hry
 			client.sethealth(Integer.parseInt(p[2]));
 			enemyHealth = Integer.parseInt(p[3]);
 			if(Integer.parseInt(p[4])==1){
@@ -261,13 +292,16 @@ public class MainWindow {
 			}
 			primaryStage = createArena(primaryStage);
 			conn.gameReconResponse();
-		} else {
+		} else {													//prisela spatna zprava ze serveru
 			alert.setHeaderText("Game failed!");
 			alert.setContentText("Something went wrong");
 			alert.show();
 		}
 	}
 
+	/**
+	 * nacte obrazky
+	 */
 	public static void load_images(){
 		if(arena_background == null){
 			try {
@@ -279,6 +313,11 @@ public class MainWindow {
 		}
 	}
 
+	/**
+	 * vytvori stage areny
+	 * @param stage aktualni stage
+	 * @return	stage areny
+	 */
 	private Stage createArena(Stage stage) {
 		stage = onCloseEvent(stage);
 		String currentPlayer = "";
@@ -292,7 +331,7 @@ public class MainWindow {
 
 		Label playerHealth = new Label("Your HP: " + client.health);
 		Label oponentHealth = new Label("Enemy HP: " + enemyHealth);
-		Button instakill = new Button("instakill");
+		Button instakill = new Button("instakill");						//instakill pro testovani
 		Button fastAttack = new Button("fast attack");
 		Button normalAttack = new Button("normall attack");
 		Button hardAttack = new Button("hard attack");
@@ -316,10 +355,10 @@ public class MainWindow {
 		info.add(nowPlaying, 1, 2);
 		info.add(playerHealth, 1, 5);
 		info.add(oponentHealth, 1, 6);
-		info.add(fastAttack, 1, 10);
-		info.add(normalAttack, 1, 11);
-		info.add(hardAttack, 1, 12);
-		info.add(instakill, 1, 13);
+		info.add(fastAttack, 1, 8);
+		info.add(normalAttack, 1, 9);
+		info.add(hardAttack, 1, 10);
+		info.add(instakill, 1, 11);
 
 		fastAttack.setOnAction(event -> {
 			countAttack(1);
@@ -347,6 +386,10 @@ public class MainWindow {
 		return stage;
 	}
 
+	/**
+	 * spocita velikost poskozeni
+	 * @param i id utoku
+	 */
 	public void countAttack(int i) {
 		int dmg = 0;
 		int chance = r.nextInt(10);
@@ -354,7 +397,7 @@ public class MainWindow {
 			case 1: dmg = (chance <= 7 ? 10 : 0);break;
 			case 2: dmg = (chance <= 5 ? 30 : 0);break;
 			case 3: dmg = (chance <= 2 ? 50 : 0);break;
-			case 4: dmg = 100;break;
+			case 4: dmg = 100;break;		//testovaci ucel
 			default: dmg=0;
 		}
 		conn.sendDMG(dmg);

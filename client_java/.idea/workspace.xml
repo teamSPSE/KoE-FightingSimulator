@@ -2,13 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4413b61f-fe87-44d8-8a26-833da2615950" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../SwordAndSandals.jar" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Color.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Connection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Connection.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MainWindow.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/MessageReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MessageReader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/UPSSemestral-1.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/UPSSemestral-1.0.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/UPSrun.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/UPSrun.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/States.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/States.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sas.PNG" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,6 +99,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="811" y="409" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1610844839859" />
+    <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1611708722542">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040/-1280.0.1280.984@0.0.1920.1040" timestamp="1611708722542" />
     <state x="1115" y="229" key="FileChooserDialogImpl" timestamp="1611100775727">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

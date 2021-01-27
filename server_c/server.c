@@ -19,35 +19,49 @@
 #include "usefc.h"
 
 
+/*maximalni pocet uzivatelu - defaultne neni omezeno */
+int MAX_USERS = 0;
 
-int MAX_USERS = MAX_USERSC;
+/*uzivatele*/
 users *theusers;
+
+/*lobby*/
 lobby *thelobby;
+
+/*hry*/
 games *thegames;
+
+/*logger - pocita kolik bylo poslano/prijato bytu*/
 logger *thelogger;
+
+/*pozastaveni jadra*/
 pthread_rwlock_t lock;
 
-int lastMessageSocket = 0;
-char *lastMessege = 0;
-int lastMessageID = 0;
-
+/* vypise uzivatele, hry a lobby */
 void print_all_vars(){
     print_all_users(theusers);
     print_all_games(thegames);
     print_lobby(thelobby);
 }
 
+/* prihlasi uzivatele
+    @param int socket - socket uzivatele
+    @param char *name - jmeno uzivatele
+ */
 void login(int socket, char *name) {
     int i;
     game *tmp_game;
-
-    if (theusers -> user_count == MAX_USERS) {
+    
+    //kontrola poctu uzivatelu
+    if (MAX_USERS > 0 && theusers -> user_count == MAX_USERS) {
         printf("Couldn't login user: %s. Maximum of logged in players reached.\n", name);
         printf("Sent message: logi-nackfull\n");
 		send_message(socket, "logi-nackfull\n", &thelogger);
         return;
     }
-	if(user_get_user_by_name(theusers, name)){
+
+    //dostupnost jmena
+	if(user_get_user_by_name(theusers, name) != NULL){
         printf("Username: %s already taken.\n", name);
         printf("Sent message: logi-nackname\n");
 		send_message(socket, "logi-nackname\n", &thelogger);
@@ -59,6 +73,7 @@ void login(int socket, char *name) {
     printf("Sent message: logi-ack\n");
 	send_message(socket, "logi-ack\n", &thelogger);
 
+    //reconnect
     tmp_game = find_game_by_name(thegames, name);
     if(tmp_game != NULL){            
         int *my_user_health;
@@ -82,7 +97,7 @@ void login(int socket, char *name) {
     }
 }
 
-
+/* odhlaseni uzivatele */
 void logout(int socket) {
     if(user_get_user_by_socket_ID(theusers, socket) != NULL){
         print_all_vars();
@@ -90,7 +105,9 @@ void logout(int socket) {
     }
 }
 
-
+/* pridani uzivatele do lobby
+    @param int socket - socket uzivatele
+ */
 void join_lobby(int socket) {
 	user *my_user = NULL;
 	user *second_user = NULL;
@@ -126,6 +143,11 @@ void join_lobby(int socket) {
 	return;
 }
 
+/* 
+    provede poskozeni
+    @param int socket - socket uzivatele, ktery posila poskozeni
+    @param char *msg - poskozeni
+ */
 void processDMG(int socket, char *msg){
     int dmg = atoi(msg+2);
     printf("recvd dmg %s %d",msg, dmg);
@@ -168,6 +190,7 @@ void processDMG(int socket, char *msg){
     *second_user_health = *second_user_health - dmg;
     thegame->now_playing_name = second_user->name;
 
+    //pokud oponent jeste ma dost zdravi, presuneme se na dalsi tah, pokud ne hra konci
     if(*second_user_health > 0){
         sprintf(message_1, "game-update-%d-%d\n", *my_user_health, *second_user_health);
         if(my_user->connected)
@@ -187,6 +210,10 @@ void processDMG(int socket, char *msg){
     }
 }
 
+/* vyhodnocuje prijatou zpravu
+    @param int socket - socket klienta, ktery poslal zpravu
+    @param char *msg - poslana zprava
+ */
 int parse_msg(int socket, char *msg) {
     long int type;
     char *name, *room, t[2], *place, *x, *y;
@@ -196,53 +223,56 @@ int parse_msg(int socket, char *msg) {
 
   thelogger->bytes_in += strlen(msg);
     switch (type) {
-        case 1:
+        case 1: //login
             pthread_rwlock_rdlock(&lock);
             printf("Received login request: %s\n", msg);
             login(socket, msg + 2);
             pthread_rwlock_unlock(&lock);
             return 1;
-        case 2:
+        case 2: //logout
             pthread_rwlock_rdlock(&lock);
             printf("Received logout request: %s\n", msg);
             logout(socket);
             pthread_rwlock_unlock(&lock);
             return 2;
-        case 3:
+        case 3: //pridani uzivatele do lobby
             pthread_rwlock_rdlock(&lock);         
             printf("Received joinLobby request: %s\n", msg);
             join_lobby(socket);   
             pthread_rwlock_unlock(&lock);
             return 3;
-        case 4:
+        case 4: //provedeni poskozeni
             pthread_rwlock_rdlock(&lock);         
             printf("Received processDMG request: %s\n", msg);
             processDMG(socket, msg);   
             pthread_rwlock_unlock(&lock);
             return 4;
-        case 10:
+        case 10:    //odpoved na reconnect klienta
             pthread_rwlock_rdlock(&lock);         
             printf("Received game reconnected response.\n"); 
             pthread_rwlock_unlock(&lock);
             return 10;
-        case 11:
+        case 11:    //odpoved na start hry
             pthread_rwlock_rdlock(&lock);         
             printf("Received game started response.\n");
             pthread_rwlock_unlock(&lock);
             return 11;
-        case 13:
+        case 13:    //odpoved na ping klienta
             pthread_rwlock_rdlock(&lock);
             //printf("Received ping message, sending response.\n");
             if(user_get_connected(theusers, socket))
                 send_message(socket, "alive\n", &thelogger);
             pthread_rwlock_unlock(&lock);
             return 13;   
-        default:
+        default:    //nevyhodnocena zprava - zaviram spojeni
             printf("%s\n", msg);
             return 0;
     }
 }
 
+/* spravuje, co se ma dit behem spojeni
+    @param void *arg - socket klienta
+ */
 void *connection_handler(void *arg) {
     int client_sock, val, size_rec, res;
     char msg[200], msg_size[3];
@@ -296,6 +326,7 @@ void *connection_handler(void *arg) {
     return 0;
 }
 
+/* hlavni metoda programu */
 int main(int argc, char *argv[]) {
     int port;
     char *ip = NULL;
@@ -304,25 +335,25 @@ int main(int argc, char *argv[]) {
     tmvl.tv_sec = 5;
     tmvl.tv_usec = 0;
 
-    if (argc < 4) {
+    if (argc < 3) {
         printf("Not enough arguments.\n");
         printf("First argument is IP address, 0 for any\n");
         printf("Second argument is Port\n");
-        printf("Third argument - number of users\n");
+        printf("Third argument - number of users (optimal)\n");
         return EXIT_FAILURE;
     }
     if (argc > 4) {
         printf("Too many arguments.\n");
         return EXIT_FAILURE;
     } else {
-        MAX_USERS = atoi(argv[3]);
+        if(argc == 4)
+            MAX_USERS = atoi(argv[3]);
+        else
+            MAX_USERS = 0;
+
         port = atoi(argv[2]);
-        if (MAX_USERS == 0) {
-            printf("Invalid max users param.\n");
-            return EXIT_FAILURE;
-        }
         if (port < 0 || port > 65535) {
-            printf("Invalid port.\n");
+            printf("Invalid port. Port has to be in <0,65535>\n");
             return EXIT_FAILURE;
         }
     }
@@ -340,10 +371,10 @@ int main(int argc, char *argv[]) {
         exit(2);
     }
 
-    users_create(&theusers);		//struktura obsahujici pole struktur
-	lobby_create(&thelobby);	    //ukazatel na strukturu
-	games_create(&thegames);	    //as users
-	logger_create(&thelogger);
+    users_create(&theusers);		//struktura obsahujici pole struktur uzivatelu
+	lobby_create(&thelobby);	    //ukazatel na strukturu lobby
+	games_create(&thegames);	    //struktura obsahujici pole struktur her
+	logger_create(&thelogger);      //logger
 
     server_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);    //0 - udp | IPPROTO_TCP - tcp
     memset(&my_addr, 0, sizeof(struct sockaddr_in));
@@ -395,7 +426,6 @@ int main(int argc, char *argv[]) {
             *th_socket = client_socket;
             printf("[%d] New connection.\n",client_socket);
             pthread_create(&thread_id, NULL, (void *) &connection_handler, (void *) th_socket);
-            //pthread_detach(thread_id);
         } else {
             printf("Fatal ERROR\n");
             return -1;

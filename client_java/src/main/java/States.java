@@ -1,10 +1,12 @@
+/**
+ * stavy klienta
+ */
 public enum States {
     LOGGING(-1),
     LOGGED(0),
     IN_QUEUE(1),
-    DISCONNECT(2),
-    YOU_PLAYING(3),
-    OPPONENT_PLAYING(4);
+    YOU_PLAYING(2),
+    OPPONENT_PLAYING(3);
 
     private int index;
 

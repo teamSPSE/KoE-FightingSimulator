@@ -8,9 +8,12 @@
 #include "usefc.h"
 #include "logger.h"
 
-typedef struct the_game game;
-typedef struct the_games games;
-struct the_game {
+/**
+ * velmi podobne soubru user.h
+ */
+
+/* struktura konkretni hry */
+typedef struct the_game {
 	char *name_1;				//jmeno prvniho hrace
 	char *name_2;				//jmeno druheho hrace
 	char *now_playing_name;		//jmeno hrace ktery prave hraje
@@ -18,11 +21,13 @@ struct the_game {
 	int health_2;				//zdravi prvniho hrace
 	int game_ID;				//id hry
 	
-};
-struct the_games {
-	int games_count;
-	game **games;
-};
+} game;
+
+/* struktura obsahujicic vsehcny hry */
+typedef struct the_games {
+	int games_count;	//pocet her
+	game **games;		//pole her
+} games;
 
 
 void games_create(games **all_games);

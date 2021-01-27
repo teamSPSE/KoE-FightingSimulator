@@ -1,4 +1,6 @@
-
+/**
+ * trida obsahujici konstanty pouziajici se v programu
+ */
 public class Constants {
 	
 	//arena constants
