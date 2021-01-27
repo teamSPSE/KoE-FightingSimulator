@@ -121,8 +121,8 @@ public class MessageReader extends Thread {
 			//System.out.println("Received ping response.");
 		}else{
 			System.out.println("Message not recognized. Program will quit. msg:"+msg);	//pokud neni zprava rozpoznana, vypisu hlasku, moznost vypnuti programu
-			//Platform.exit();
-			//System.exit(0);
+			Platform.exit();
+			System.exit(0);
 		}
 	}
 

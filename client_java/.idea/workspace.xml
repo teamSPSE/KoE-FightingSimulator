@@ -2,27 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4413b61f-fe87-44d8-8a26-833da2615950" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.bat" beforeDir="false" afterPath="$PROJECT_DIR$/build.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Connection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Connection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MainWindow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/UPSSemestral-1.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/UPSSemestral-1.0.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/UPSrun.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/UPSrun.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Client.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Color.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Connection.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Connection.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Constants.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Constants.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/MainWindow$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/MainWindow$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/MainWindow.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/MainWindow.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/MessageReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/MessageReader.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/States.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/States.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/MessageReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MessageReader.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
