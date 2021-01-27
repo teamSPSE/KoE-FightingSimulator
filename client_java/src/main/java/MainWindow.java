@@ -257,13 +257,18 @@ public class MainWindow {
 			return;
 		}else if(p[1].equals("finish")){								// hra skoncila
 			Alert finish = new Alert(Alert.AlertType.CONFIRMATION);
+			System.out.println("Game finished!");
 			finish.setHeaderText("Game finished!");
-			if(p[2].equals("1"))										//vyherce
+			if(p[2].equals("1"))		{								//vyherce
+				System.out.println("You are the WINNER!!!\nDo you want to play another match?");
 				finish.setContentText("You are the WINNER!!!\nDo you want to play another match?");
-			else if(p[2].equals("0"))									//porazeny
+			}else if(p[2].equals("0"))	{								//porazeny{
 				finish.setContentText("You have lost :(\nDo you want to play another match?");
-			else														//chyba
+				System.out.println("You have lost :(\nDo you want to play another match?");
+			}else{														//chyba
 				finish.setContentText("Something went wrong! We have no winner!\nDo you want to play another match?");
+				System.out.println("Something went wrong! We have no winner!");
+		}
 		//rozhodnoti uzivatele, zda chce hrat dal
 			Optional<ButtonType> result = finish.showAndWait();
 			if (result.get() == ButtonType.OK){

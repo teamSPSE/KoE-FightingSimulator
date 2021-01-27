@@ -20,3 +20,7 @@ cd /home/sopr/UPSSemestral/ukázka\ ze\ cviceni/workin/c_src/
 
 client
 C:\Users\uzivatel\Documents\skola\3rocnik\UPS\ukázka ze cviceni\workin\java_src
+
+
+
+oveøení portu když je text
