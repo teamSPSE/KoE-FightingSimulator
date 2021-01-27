@@ -317,7 +317,7 @@ void *connection_handler(void *arg) {
         if(strlen(msg)>1){
             res = parse_msg(client_sock, msg);
         }
-        
+
         if (res == 2) {
             user_set_connected(&theusers, client_sock, 0);
             close(client_sock);
@@ -366,8 +366,10 @@ int main(int argc, char *argv[]) {
             MAX_USERS = 0;
 
         port = atoi(argv[2]);
-        if (port < 0 || port > 65535) {
-            printf("Invalid port. Port has to be in <0,65535>\n");
+        if(port == 0)
+            port = 10000;
+        if (port <= 0 || port >= 65535) {
+            printf("Invalid port. Port has to be in (0,65535)\n");
             return EXIT_FAILURE;
         }
     }
