@@ -13,7 +13,6 @@
 
 #include "user.h"
 #include "lobby.h"
-#include "consts.h"
 #include "game.h"
 #include "logger.h"
 #include "usefc.h"
