@@ -172,6 +172,7 @@ public class Connection {
 		} else {
 			msg = s + t + val;
 		}
+		System.out.println("zprava:"+msg);
 		return msg;
 	}
 
@@ -184,6 +185,7 @@ public class Connection {
 		mainWindow.client.setUserName(name);
 		try {
 			msgOut.write(msg.getBytes());
+			System.out.println("login msg:"+msg);
 		} catch (IOException e) {
 			System.out.println("Failed to send login message.");
 			alert.setHeaderText("Failed to send login message.");

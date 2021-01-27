@@ -225,10 +225,13 @@ void processDMG(int socket, char *msg){
  */
 int parse_msg(int socket, char *msg) {
     long int type;
-    char *name, *room, t[2], *place, *x, *y;
+    char t[2];
     t[0] = msg[0];
     t[1] = msg[1];
-    type = strtol(t, NULL, 10);
+    //type = strtol(t, NULL, 10);
+    type = atoi(&t[0]);
+    
+    printf("prijata zprava:%s type:%d\n",msg, type);
 
   thelogger->bytes_in += strlen(msg);
     switch (type) {
