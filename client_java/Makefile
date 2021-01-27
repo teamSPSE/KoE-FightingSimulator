@@ -1,4 +1,4 @@
 all: client
 
 client:
-	build.bat
+	mvn clean install -f pomJava11.xml

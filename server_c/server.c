@@ -149,8 +149,18 @@ void join_lobby(int socket) {
     @param char *msg - poskozeni
  */
 void processDMG(int socket, char *msg){
-    int dmg = atoi(msg+2);
-    printf("recvd dmg %s %d",msg, dmg);
+    int dmg_id = atoi(msg+2);
+    int dmg = 0;
+    int chance = (rand() % 11); 
+    switch (dmg_id)
+    {
+        case 1: dmg = (chance <= 7 ? 10 : 0);break;
+        case 2: dmg = (chance <= 5 ? 30 : 0);break;
+		case 3: dmg = (chance <= 2 ? 50 : 0);break;
+		case 4: dmg = 100;break;		//testovaci ucel
+		default: dmg=0;
+    }
+    printf("recvd msg:%s dmgid:%d dmg:%d",msg, dmg_id, dmg);
     user *my_user = NULL;
     user *second_user = NULL;
     game *thegame = NULL;

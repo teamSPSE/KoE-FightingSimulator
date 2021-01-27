@@ -1,4 +1,4 @@
-all: client
+all: server client
 
 client:
 	cd client_java && mingw32-make

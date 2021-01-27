@@ -78,7 +78,7 @@ public class Connection {
 			default:
 				break;
 		}
-
+		//System.out.println("address: " + this.addr+" port:"+this.port);
 		if(mainWindow != null){
 			this.mainWindow = mainWindow;
 		}
@@ -229,7 +229,7 @@ public class Connection {
 	 * @param dmg poskozeni
 	 */
 	public void sendDMG(int dmg) {
-		System.out.println("dmg:"+dmg);
+		System.out.println("dmg id:"+dmg);
 		String msg = genMsg(""+dmg, 4);
 		try {
 			msgOut.write(msg.getBytes());

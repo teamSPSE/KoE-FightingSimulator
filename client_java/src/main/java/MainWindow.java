@@ -391,7 +391,7 @@ public class MainWindow {
 	 * @param i id utoku
 	 */
 	public void countAttack(int i) {
-		int dmg = 0;
+		/*int dmg = 0;
 		int chance = r.nextInt(10);
 		switch (i){
 			case 1: dmg = (chance <= 7 ? 10 : 0);break;
@@ -399,7 +399,7 @@ public class MainWindow {
 			case 3: dmg = (chance <= 2 ? 50 : 0);break;
 			case 4: dmg = 100;break;		//testovaci ucel
 			default: dmg=0;
-		}
-		conn.sendDMG(dmg);
+		}*/
+		conn.sendDMG(i);
 	}
 }
